@@ -3,20 +3,31 @@ const OrbitControls = require('three-orbitcontrols');
 
 class Scene {
     constructor(param = {}) {
-        this.params = Object.assign(Scene.default, param);
+        //===============
+        //---Parameter---
+        //===============
+        var defaultParam = {
+            camera: {
+                depth: 300,
+                near: -50,
+                far: 1000,
+                position: new THREE.Vector3(2, 2, 2),
+                lookAt: [0, 0, 0],    
+            }
+        };
+        this.params = Object.assign(defaultParam, param);
         
         //===============
         //-----Scene-----
         //===============
         this.scene = new THREE.Scene();
-        this.scene.fog = new THREE.Fog(0x162d47, 50, 300);
         
         //==================
         //-----Renderer-----
         //==================
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        // this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.shadowMap.enabled = true;
         document.body.appendChild( this.renderer.domElement );
 
@@ -41,36 +52,31 @@ class Scene {
         this.camera.bottom = window.innerHeight / - viewSize;
         this.camera.updateProjectionMatrix();
 
-        console.log(this.camera);
         // var cameraHelper = new THREE.CameraHelper(this.camera);
         // this.add(cameraHelper);
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
        
-
+        //===============
+        //-----Light-----
+        //===============
         var spotLight = new THREE.SpotLight( 0xffffff );
         spotLight.position.set( 10, 10, 10 );
         this.scene.add( spotLight );
         
-        var spotLightHelper = new THREE.SpotLightHelper( spotLight );
-        this.scene.add( spotLightHelper );
+        // var spotLightHelper = new THREE.SpotLightHelper( spotLight );
+        // this.scene.add( spotLightHelper );
     }
 
     add(object) {
         this.scene.add(object);
     }
 
+    remove(object) {
+        this.scene.remove(object);
+    }
+
     render() {
         this.renderer.render(this.scene, this.camera);
-    }
-}
-
-Scene.default = {
-    camera: {
-        depth: 300,
-        near: -50,
-        far: 1000,
-        position: new THREE.Vector3(2, 2, 2),
-        lookAt: [0, 0, 0],    
     }
 }
 
