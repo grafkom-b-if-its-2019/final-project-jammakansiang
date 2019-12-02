@@ -24,6 +24,10 @@ class Queue {
         return this.items[this.size() - 1];
     }
 
+    get(index) {
+        return this.items[index];
+    }
+
     set(item) {
         var index = this.size() - 1;
         this.items[index] = item;

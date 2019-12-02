@@ -6,8 +6,9 @@ class Brick {
         //---Parameter---
         //===============
         var defaultParam = {
-            edge: new THREE.Vector3(5, 1, 5),
+            edge: new THREE.Vector3(1, 1, 1),
             position: new THREE.Vector3(0, 0, 0),
+            scale: new THREE.Vector3(5, 1, 5),
             castShadow: true,
             receiveShadow: true,
             color: 0x80FF70,
@@ -29,6 +30,7 @@ class Brick {
         this.mesh.castShadow = this.params.castShadow;
         this.mesh.receiveShadow = this.params.receiveShadow;
         this.mesh.position.copy(this.params.position);
+        this.mesh.scale.set(this.params.scale.x, this.params.scale.y, this.params.scale.z);
     }
 
     // Karena scene me-render mesh,
@@ -41,8 +43,28 @@ class Brick {
         return this.mesh.position;
     }
 
-    // Melakukan move object sesuai arah
-    // pada sumbu cartesian 'x' dan 'z'
+    scale() {
+        return this.mesh.scale;
+    }
+
+    /**
+     * @param {Brick} prevBrick 
+     */
+    cut(prevBrick)
+    {
+        var prevScale = prevBrick.scale();
+        var prevPosition = prevBrick.position();
+        var curScale = this.scale();
+        var curPosition = this.position();
+
+        
+        
+    }
+
+    /* 
+     * Melakukan move object sesuai arah
+     * pada sumbu cartesian 'x' dan 'z'
+     */
     move() {
         const batas = 6.5;
 
@@ -72,6 +94,10 @@ class Brick {
             default:
                 break;
         }
+    }
+
+    stop() {
+        this.params.speed = 0;
     }
 
 }

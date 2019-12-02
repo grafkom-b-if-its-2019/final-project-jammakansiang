@@ -16,7 +16,9 @@ const PLAY = 2;
 var scene = new Scene();
 let bricks = new Queue();
 let brick = new Brick();
-let command, direction = 'x';
+let command, startPos = 6.5, direction = 'x';
+let scale = new THREE.Vector3();
+let position = new THREE.Vector3();
 
 for(let i = -15;i <= 1; i++) {
     brick = new Brick({
@@ -36,34 +38,43 @@ function animate() {
     brick = bricks.back();
     brick.move();
 
-    switch (command) {
-        case SPACE:
-            brick.params.speed = 0;
-            bricks.set(brick);
+    if(command == SPACE) {
+        prevBrick = bricks.get(bricks.size() - 2);
+        brick.stop();
+        // brick.cut(prevBrick);
 
-            for(let i = 0;i < bricks.size(); i++)
-                bricks.items[i].position().y -= 1;
-            
+        bricks.set(brick);
+
+        // Untuk setiap stepnya, balok yang lama turun 1 kotak
+        for(let i = 0;i < bricks.size(); i++)
+            bricks.items[i].position().y -= 1;
+
+        if(direction == 'x') {
             var topBrick = new Brick({
+                position: new THREE.Vector3(-startPos, 0, brick.position().z),
+                scale: new THREE.Vector3(brick.scale().x, brick.scale().y, brick.scale().z),
                 direction: direction
             });
-            scene.add(topBrick.build());
-            scene.remove(bricks.front().build());
-            
-            console.log(scene.scene.children);
-            bricks.pop();
-            bricks.push(topBrick);
+            direction = 'z';
+            startPos = -startPos;
+        }
+        else if(direction == 'z') {
+            var topBrick = new Brick({
+                position: new THREE.Vector3(brick.position().x, 0, startPos),
+                scale: new THREE.Vector3(brick.scale().x, brick.scale().y, brick.scale().z),
+                direction: direction
+            });
+            direction = 'x';
+        }
 
-            if(direction == 'x')
-                direction = 'z';
-            else if(direction == 'z')
-                direction = 'x';
+        // Menambahkan balok baru
+        // Membuang balok lama
+        scene.add(topBrick.build());
+        scene.remove(bricks.front().build());
+        bricks.pop();
+        bricks.push(topBrick);
 
-            command = PLAY;
-            break;
-    
-        default:
-            break;
+        command = PLAY;
     }
 
     scene.render();

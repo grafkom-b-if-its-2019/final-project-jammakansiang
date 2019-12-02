@@ -65,8 +65,13 @@ class Scene {
         
         // var spotLightHelper = new THREE.SpotLightHelper( spotLight );
         // this.scene.add( spotLightHelper );
+
+        addEventListener('resize', () => this.onWindowResize());
     }
 
+    /**
+     * @param {THREE.Object3D} object 
+     */
     add(object) {
         this.scene.add(object);
     }
@@ -77,6 +82,17 @@ class Scene {
 
     render() {
         this.renderer.render(this.scene, this.camera);
+    }
+
+    onWindowResize() {
+        const viewSize = 64;
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.camera.left = window.innerWidth / - viewSize;
+        this.camera.right = window.innerWidth / viewSize;
+        this.camera.top = window.innerHeight / viewSize;
+        this.camera.bottom = window.innerHeight / - viewSize;
+        this.camera.updateProjectionMatrix();
     }
 }
 
