@@ -25,11 +25,12 @@ class Scene {
         //==================
         //-----Renderer-----
         //==================
-        this.renderer = new THREE.WebGLRenderer();
+        const canvas = document.querySelector('#c');
+        this.renderer = new THREE.WebGLRenderer({canvas, alpha:true});
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.shadowMap.enabled = true;
-        document.body.appendChild( this.renderer.domElement );
+        // document.body.appendChild( this.renderer.domElement );
 
         //================
         //-----Camera-----
@@ -60,8 +61,12 @@ class Scene {
         //-----Light-----
         //===============
         var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 10, 10, 10 );
+        spotLight.position.set( 8, 10, 10 );
         this.scene.add( spotLight );
+
+        var spotLight1 = new THREE.SpotLight( 0x444444 );
+        spotLight1.position.set( -8, -10, -10 );
+        this.scene.add( spotLight1 );
         
         // var spotLightHelper = new THREE.SpotLightHelper( spotLight );
         // this.scene.add( spotLightHelper );

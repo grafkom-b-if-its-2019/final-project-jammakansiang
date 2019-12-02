@@ -11,7 +11,7 @@ class Brick {
             scale: new THREE.Vector3(5, 1, 5),
             castShadow: true,
             receiveShadow: true,
-            color: 0x80FF70,
+            color: 0x4070FF,
             scene: null,
             speed: 0.07,
             isDropped: false,
