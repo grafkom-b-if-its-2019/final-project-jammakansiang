@@ -56,9 +56,19 @@ class Brick {
         var prevPosition = prevBrick.position();
         var curScale = this.scale();
         var curPosition = this.position();
+        
+        console.log("x " + (curPosition.x - prevPosition.x));
+        console.log("z " + (curPosition.z - prevPosition.z));
+        
+        var diffX = curPosition.x - prevPosition.x;
+        var diffZ = curPosition.z - prevPosition.z;
 
-        
-        
+        curScale.x -= Math.abs(diffX);
+        curPosition.x -= (diffX/2);
+        curScale.z -= Math.abs(diffZ);
+        curPosition.z -= (diffZ/2);
+
+        this.mesh.scale.copy(curScale);
     }
 
     /* 

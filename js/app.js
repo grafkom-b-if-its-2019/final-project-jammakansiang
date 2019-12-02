@@ -16,7 +16,7 @@ const PLAY = 2;
 var scene = new Scene();
 let bricks = new Queue();
 let brick = new Brick();
-let command, startPos = 6.5, direction = 'x';
+let command, startPos = 6.5, direction = 'z';
 let scale = new THREE.Vector3();
 let position = new THREE.Vector3();
 
@@ -41,7 +41,7 @@ function animate() {
     if(command == SPACE) {
         prevBrick = bricks.get(bricks.size() - 2);
         brick.stop();
-        // brick.cut(prevBrick);
+        brick.cut(prevBrick);
 
         bricks.set(brick);
 
