@@ -1,80 +1,15 @@
-<html>
-	<head>
-		<title>My first three.js app</title>
-		<style>
-			body { margin: 0; }
-			canvas { width: 100%; height: 100% }
-		</style>
-	</head>
-	<body>
-		<script src="js/three.js"></script>
-		<script type="text/javascript" src="js/stats.min.js"></script>
-    	<script type="text/javascript" src="js/dat.gui.js"></script>
-		<script>
-			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 0.1, 1000 );
-
-			var renderer = new THREE.WebGLRenderer();
-			renderer.setSize( window.innerWidth, window.innerHeight );
-			document.body.appendChild( renderer.domElement );
-			
-			//tambah tekstur ke box
-			// var loaer = new THREE.CubeTextureLoader();
-			// loaer.setPath( 'asset/texture/' );
-
-			// var textureCube = loaer.load( [
-			// 	'posx.jpg', 'negx.jpg',
-			// 	'posy.jpg', 'negy.jpg',
-			// 	'posz.jpg', 'negz.jpg'
-			// ] );
-
-			//gambar box
-			var geometry = new THREE.BoxGeometry( 1, 0.5, 1 );
-			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-            var cube = new THREE.Mesh( geometry, material );
-            cube.castShadow = true; 
-            cube.receiveShadow = true;
-			scene.add( cube );
-
-			//cahaya
-			// tambahkan ambient lighting
-			var ambiColor = "#0c0c0c";
-			var ambientLight = new THREE.AmbientLight(ambiColor);
-			scene.add(ambientLight);
-
-			// tambahkan spotLight supaya lebih terang
-			var spotLight = new THREE.SpotLight(0xffffff);
-			spotLight.position.set(40, 60, 10);
-			spotLight.castShadow = true;
-			scene.add( spotLight );
-
-			//tambahkan pointLight
-			var pointColor = "#ccffcc";
-			var pointLight = new THREE.PointLight(pointColor);
-			pointLight.distance = 100;
-			scene.add(pointLight);
-
-			//tekstur
-
-
-
-			//menentukan posisi kamera
-			camera.position.y =1;
-			camera.position.z =5;
-			var helper = new THREE.CameraHelper( camera );
-			scene.add( helper );
-
-			var animate = function () {
-				requestAnimationFrame( animate );
-				cube.rotation.x += 0.01;
-				cube.rotation.y += 0.01;
-
-				//setiap pergerakan akan selalu naik
-				cube.position.y +=0.001;
-				renderer.render( scene, camera );
-			};
-
-			animate();
-		</script>
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <title>Ditumpuk Game</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <canvas id="c"></canvas>
+    <script src="build/bundle.js"></script>
+</body>
 </html>

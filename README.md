@@ -6,3 +6,11 @@ final-project-jammakansiang created by GitHub Classroom
 * 05111740000093 Ahmad Syauqi
 * 05111740000118 Fandy Kuncoro Adianto
 * 05111740000120 Rangga Kusuma Dinata
+
+#### How to play
+> ```bash
+> $ npm install
+> $ npm start
+> ```
+
+tapi masih belum bisa play, soalnya blm jadi hehe

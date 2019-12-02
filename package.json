@@ -1,0 +1,34 @@
+{
+  "name": "final-project-jammakansiang",
+  "version": "1.0.0",
+  "description": "Final Project Grafika Komputer-B",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserifyinc --cachefile build/browserify-cache.json js/app.js -o build/bundle.js --debug -v",
+    "dev": "nodemon --exec \"npm --silent start\" --ignore build",
+    "start": "npm run build & node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grafkom-b-if-its-2019/final-project-jammakansiang.git"
+  },
+  "keywords": [
+    "final",
+    "project"
+  ],
+  "author": "Jam makan siang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grafkom-b-if-its-2019/final-project-jammakansiang/issues"
+  },
+  "homepage": "https://github.com/grafkom-b-if-its-2019/final-project-jammakansiang#readme",
+  "dependencies": {
+    "browserify": "^16.5.0",
+    "browserify-incremental": "^3.1.1",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.1",
+    "three": "^0.110.0",
+    "three-orbitcontrols": "^2.110.1"
+  }
+}
