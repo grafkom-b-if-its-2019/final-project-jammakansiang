@@ -11,7 +11,7 @@ class Brick {
             scale: new THREE.Vector3(5, 1, 5),
             castShadow: true,
             receiveShadow: true,
-            color: 0x4070FF,
+            color: "hsl(220, 100%, 50%)",
             scene: null,
             speed: 0.07,
             isDropped: false,
@@ -41,6 +41,10 @@ class Brick {
 
     position() {
         return this.mesh.position;
+    }
+
+    down() {
+        this.mesh.position.y -= 1;
     }
 
     scale() {

@@ -1,2 +1,2 @@
-build
+build/browserify-cache.json
 node_modules

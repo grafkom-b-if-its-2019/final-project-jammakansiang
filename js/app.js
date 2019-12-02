@@ -19,6 +19,7 @@ let brick = new Brick();
 let command, startPos = 6.5, direction = 'z';
 let scale = new THREE.Vector3();
 let position = new THREE.Vector3();
+let hue = 220;
 
 for(let i = -15;i <= 1; i++) {
     brick = new Brick({
@@ -47,12 +48,13 @@ function animate() {
 
         // Untuk setiap stepnya, balok yang lama turun 1 kotak
         for(let i = 0;i < bricks.size(); i++)
-            bricks.items[i].position().y -= 1;
+            bricks.items[i].down();
 
         if(direction == 'x') {
             var topBrick = new Brick({
                 position: new THREE.Vector3(-startPos, 0, brick.position().z),
                 scale: new THREE.Vector3(brick.scale().x, brick.scale().y, brick.scale().z),
+                color: "hsl(" + hue +", 100%, 50%)",
                 direction: direction
             });
             direction = 'z';
@@ -62,6 +64,7 @@ function animate() {
             var topBrick = new Brick({
                 position: new THREE.Vector3(brick.position().x, 0, startPos),
                 scale: new THREE.Vector3(brick.scale().x, brick.scale().y, brick.scale().z),
+                color: "hsl(" + hue +", 100%, 50%)",
                 direction: direction
             });
             direction = 'x';
@@ -74,6 +77,7 @@ function animate() {
         bricks.pop();
         bricks.push(topBrick);
 
+        hue = (hue + 5) % 360;
         command = PLAY;
     }
 
@@ -83,6 +87,10 @@ function animate() {
 //===================
 //---Event Handler---
 //===================
+/**
+ * 
+ * @param {KeyboardEvent} event 
+ */
 function onKeyDown(event) {
     switch (event.code) {
         case "Space":
@@ -94,5 +102,14 @@ function onKeyDown(event) {
     }
 }
 
+/**
+ * 
+ * @param {TouchEvent} event 
+ */
+function onTouchEvent(event) {
+    command = SPACE;
+}
+
+window.addEventListener('touchstart', onTouchEvent);
 window.addEventListener('keydown', onKeyDown);
 animate();
