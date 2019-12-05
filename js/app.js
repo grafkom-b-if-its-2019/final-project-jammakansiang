@@ -2,6 +2,7 @@ const THREE = require('three');
 const Scene = require('./scene');
 const Brick = require('./brick');
 const Queue = require('./queue');
+const socket = require('socket.io-client')(window.location.host);
 
 //==================
 //--Define command--
@@ -38,6 +39,10 @@ function animate() {
     requestAnimationFrame(() => {animate()});
     brick = bricks.back();
     brick.move();
+
+    socket.on('sendCoords', function(data) {
+        console.log(data);
+    });
 
     if(command == SPACE) {
         prevBrick = bricks.get(bricks.size() - 2);
@@ -110,6 +115,21 @@ function onTouchEvent(event) {
     command = SPACE;
 }
 
+
+/**
+ * 
+ * @param {DeviceOrientationEvent} event 
+ */
+function handleOrientation(event) {
+    var orientation = {
+        alpha: Math.round(event.alpha),
+        beta: Math.round(event.beta),
+        gamma: Math.round(event.gamma)
+    }
+    socket.emit('deviceOrientation', orientation);
+}
+
 window.addEventListener('touchstart', onTouchEvent);
 window.addEventListener('keydown', onKeyDown);
+window.addEventListener('deviceorientation', handleOrientation);
 animate();
