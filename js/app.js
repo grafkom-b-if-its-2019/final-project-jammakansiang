@@ -2,14 +2,14 @@ const THREE = require('three');
 const Scene = require('./scene');
 const Brick = require('./brick');
 const Queue = require('./queue');
-const socket = require('socket.io-client')(window.location.host);
 
 //==================
 //--Define command--
 //==================
 const SPACE = 0;
-const PAUSE = 1;
-const PLAY = 2;
+const PLAY = 1;
+const PAUSE = 2;
+const STOP = 3;
 
 //==================
 //---Inisialisasi---
@@ -17,37 +17,53 @@ const PLAY = 2;
 var scene = new Scene();
 let bricks = new Queue();
 let brick = new Brick();
-let command, startPos = 6.5, direction = 'z';
 let scale = new THREE.Vector3();
 let position = new THREE.Vector3();
+let command, startPos = 6.5, direction = 'x';
 let hue = 220;
 
-for(let i = -15;i <= 1; i++) {
+function init() {
+    // Membuat tumpukan awal hingga
+    // bagian bawah tertutupi
+    for(let i = -14;i < 0; i++) {
+        brick = new Brick({
+            position: new THREE.Vector3(0, i, 0),
+            direction: 'z'
+        });
+    
+        bricks.push(brick);
+        scene.add(brick.build);
+    }
+
+    // Tumpukan paling atas
     brick = new Brick({
-        position: new THREE.Vector3(0, -1 + i, 0),
+        position: new THREE.Vector3(0, 0, startPos),
         direction: 'z'
     });
 
     bricks.push(brick);
-    scene.add(brick.build());
+    scene.add(brick.build);
 }
+init();
 
 //=======================
 //--Algoritma permainan--
 //=======================
 function animate() {
     requestAnimationFrame(() => {animate()});
+    loop();
+}
+
+function loop() {
     brick = bricks.back();
     brick.move();
 
-    socket.on('sendCoords', function(data) {
-        console.log(data);
-    });
-
     if(command == SPACE) {
+
         prevBrick = bricks.get(bricks.size() - 2);
         brick.stop();
-        brick.cut(prevBrick);
+        if(!brick.cut(prevBrick))
+            command = STOP;
 
         bricks.set(brick);
 
@@ -57,8 +73,8 @@ function animate() {
 
         if(direction == 'x') {
             var topBrick = new Brick({
-                position: new THREE.Vector3(-startPos, 0, brick.position().z),
-                scale: new THREE.Vector3(brick.scale().x, brick.scale().y, brick.scale().z),
+                position: new THREE.Vector3(-startPos, 0, brick.position.z),
+                scale: new THREE.Vector3(brick.scale.x, brick.scale.y, brick.scale.z),
                 color: "hsl(" + hue +", 100%, 50%)",
                 direction: direction
             });
@@ -67,8 +83,8 @@ function animate() {
         }
         else if(direction == 'z') {
             var topBrick = new Brick({
-                position: new THREE.Vector3(brick.position().x, 0, startPos),
-                scale: new THREE.Vector3(brick.scale().x, brick.scale().y, brick.scale().z),
+                position: new THREE.Vector3(brick.position.x, 0, startPos),
+                scale: new THREE.Vector3(brick.scale.x, brick.scale.y, brick.scale.z),
                 color: "hsl(" + hue +", 100%, 50%)",
                 direction: direction
             });
@@ -77,8 +93,8 @@ function animate() {
 
         // Menambahkan balok baru
         // Membuang balok lama
-        scene.add(topBrick.build());
-        scene.remove(bricks.front().build());
+        scene.add(topBrick.build);
+        scene.remove(bricks.front().build);
         bricks.pop();
         bricks.push(topBrick);
 
@@ -88,6 +104,7 @@ function animate() {
 
     scene.render();
 }
+animate();
 
 //===================
 //---Event Handler---
@@ -115,7 +132,6 @@ function onTouchEvent(event) {
     command = SPACE;
 }
 
-
 /**
  * 
  * @param {DeviceOrientationEvent} event 
@@ -132,4 +148,3 @@ function handleOrientation(event) {
 window.addEventListener('touchstart', onTouchEvent);
 window.addEventListener('keydown', onKeyDown);
 window.addEventListener('deviceorientation', handleOrientation);
-animate();
