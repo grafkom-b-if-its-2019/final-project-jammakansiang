@@ -3,8 +3,14 @@
 * pop: pada brick yang sudah tidak terlihat (dibawah)
 * push: menambahkan diatasnya
 */
+
+const Brick = require('./brick');
+
 class Queue {
     constructor() {
+        /**
+         * @type {Array.<Brick>} Items - Array of Brick
+         */
         this.items = [];
     }
 
@@ -12,6 +18,9 @@ class Queue {
         this.items.shift();
     }
 
+    /**
+     * @param {Brick} element 
+     */
     push(element) {
         this.items.push(element);
     }

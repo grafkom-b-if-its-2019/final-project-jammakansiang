@@ -7,10 +7,13 @@ final-project-jammakansiang created by GitHub Classroom
 * 05111740000118 Fandy Kuncoro Adianto
 * 05111740000120 Rangga Kusuma Dinata
 
-#### How to play
-> ```bash
-> $ npm install
-> $ npm start
-> ```
-
-tapi masih belum bisa play, soalnya blm jadi hehe
+### Development
+Sebelum dibuka di browser, pastikan melakukan build bundle terlebih dahulu:
+```bash
+npm install # Abaikan jika sudah install
+npm run build
+```
+Untuk menjalankan program:
+```bash
+npm run dev
+```

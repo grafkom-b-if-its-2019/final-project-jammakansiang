@@ -6,15 +6,13 @@ class Brick {
         //---Parameter---
         //===============
         var defaultParam = {
-            edge: new THREE.Vector3(1, 1, 1),
+            size: new THREE.Vector3(1, 1, 1),
             position: new THREE.Vector3(0, 0, 0),
             scale: new THREE.Vector3(5, 1, 5),
             castShadow: true,
             receiveShadow: true,
             color: "hsl(220, 100%, 50%)",
-            scene: null,
             speed: 0.07,
-            isDropped: false,
             direction: 'x',
         }
 
@@ -22,60 +20,81 @@ class Brick {
         // ke default parameter agar nilai parameter
         // di dalam class berubah
         this.params = Object.assign(defaultParam, param);
-        
-        this.geometry = new THREE.BoxGeometry(this.params.edge.x, this.params.edge.y, this.params.edge.z);
+
+        this.geometry = new THREE.BoxGeometry(this.params.size.x, this.params.size.y, this.params.size.z);
         this.material = new THREE.MeshLambertMaterial( { color: this.params.color } );
         
         this.mesh = new THREE.Mesh( this.geometry, this.material );
         this.mesh.castShadow = this.params.castShadow;
         this.mesh.receiveShadow = this.params.receiveShadow;
         this.mesh.position.copy(this.params.position);
-        this.mesh.scale.set(this.params.scale.x, this.params.scale.y, this.params.scale.z);
+        this.mesh.scale.copy(this.params.scale);
     }
 
     // Karena scene me-render mesh,
     // agar lebih mudah memanggilnya dibuat fungsi saja
-    build() {
+    get build() {
         return this.mesh;
     }
 
-    position() {
+    get position() {
         return this.mesh.position;
+    }
+
+    /**
+     * @param {THREE.Vector3} newPosition
+     */
+    set position(newPosition) {
+        this.position.copy(newPosition);
+    }
+
+    get scale() {
+        return this.mesh.scale;
+    }
+
+    /**
+     * @param {THREE.Vector3} newScale
+     */
+    set scale(newScale) {
+        this.scale.copy(newScale);
     }
 
     down() {
         this.mesh.position.y -= 1;
     }
 
-    scale() {
-        return this.mesh.scale;
-    }
-
     /**
      * @param {Brick} prevBrick 
+     * @returns {boolean} Kondisi apakah dia masih bisa memotong atau tidak
      */
     cut(prevBrick)
     {
-        var prevScale = prevBrick.scale();
-        var prevPosition = prevBrick.position();
-        var curScale = this.scale();
-        var curPosition = this.position();
-        
-        console.log("x " + (curPosition.x - prevPosition.x));
-        console.log("z " + (curPosition.z - prevPosition.z));
+        var prevPosition = prevBrick.position;
+        var curScale = this.scale;
+        var curPosition = this.position;
         
         var diffX = curPosition.x - prevPosition.x;
         var diffZ = curPosition.z - prevPosition.z;
+
+        console.log("x : " + diffX, curScale.x);
+        console.log("Z : " + diffZ, curScale.z);
+
+        // Jika ukuran saat ini lebih kecil
+        // dari potongannya, maka error / gameover (return false)
+        if(curScale.x < Math.abs(diffX) 
+        || curScale.z < Math.abs(diffZ) )
+            return false;
 
         curScale.x -= Math.abs(diffX);
         curPosition.x -= (diffX/2);
         curScale.z -= Math.abs(diffZ);
         curPosition.z -= (diffZ/2);
 
-        this.mesh.scale.copy(curScale);
+        this.scale.copy(curScale);
+        return true;
     }
 
-    /* 
+    /** 
      * Melakukan move object sesuai arah
      * pada sumbu cartesian 'x' dan 'z'
      */
@@ -83,25 +102,27 @@ class Brick {
         const batas = 6.5;
 
         switch (this.params.direction) {
+            // Jika bergerak di-sumbu 'x'
             case 'x':
-                if(this.mesh.position.x >= batas || this.mesh.position.x <= -batas)
+                if(this.position.x >= batas || this.position.x <= -batas)
                     this.params.speed = -this.params.speed;
                     
-                if(this.mesh.position.x >= batas)
-                    this.mesh.position.x = batas;
-                else if(this.mesh.position.x <= -batas)
-                    this.mesh.position.x = -batas;
+                if(this.position.x >= batas)
+                    this.position.x = batas;
+                else if(this.position.x <= -batas)
+                    this.position.x = -batas;
                 
-                this.mesh.position.x += this.params.speed;
+                this.position.x += this.params.speed;
                 break;
+            // Jika bergerak di-sumbu 'z'
             case 'z':
-                if(this.mesh.position.z >= batas || this.mesh.position.z <= -batas)
+                if(this.position.z >= batas || this.position.z <= -batas)
                     this.params.speed = -this.params.speed;
                     
-                if(this.mesh.position.z >= batas)
-                    this.mesh.position.z = batas;
-                else if(this.mesh.position.z <= -batas)
-                    this.mesh.position.z = -batas;
+                if(this.position.z >= batas)
+                    this.position.z = batas;
+                else if(this.position.z <= -batas)
+                    this.position.z = -batas;
                 
                 this.mesh.position.z += this.params.speed;
                 break;

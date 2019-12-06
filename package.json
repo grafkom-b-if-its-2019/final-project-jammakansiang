@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserifyinc --cachefile build/browserify-cache.json js/app.js -o build/bundle.js --debug -v",
+    "compile": "browserifyinc --cachefile build/browserify-cache.json js/app.js -o build/bundle.js --debug -v",
+    "build": "browserify js/app.js -o build/bundle.js --debug -v",
     "dev": "nodemon --exec \"npm --silent start\" --ignore build",
-    "start": "npm run build & node server.js"
+    "start": "npm run compile & node server.js"
   },
   "repository": {
     "type": "git",
