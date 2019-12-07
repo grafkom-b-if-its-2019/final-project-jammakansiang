@@ -25,6 +25,7 @@ class Brick {
         this.material = new THREE.MeshLambertMaterial( { color: this.params.color } );
         
         this.mesh = new THREE.Mesh( this.geometry, this.material );
+        this.mesh.name = this.mesh.uuid;
         this.mesh.castShadow = this.params.castShadow;
         this.mesh.receiveShadow = this.params.receiveShadow;
         this.mesh.position.copy(this.params.position);
@@ -35,6 +36,10 @@ class Brick {
     // agar lebih mudah memanggilnya dibuat fungsi saja
     get build() {
         return this.mesh;
+    }
+
+    get name() {
+        return this.mesh.name;
     }
 
     get position() {

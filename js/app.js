@@ -2,7 +2,7 @@ const THREE = require('three');
 const Scene = require('./scene');
 const Brick = require('./brick');
 const Queue = require('./queue');
-const socket = require('socket.io-client')(window.location.host);
+// const socket = require('socket.io-client')(window.location.host);
 
 //==================
 //--Define command--
@@ -10,7 +10,8 @@ const socket = require('socket.io-client')(window.location.host);
 const SPACE = 0;
 const PLAY = 1;
 const PAUSE = 2;
-const STOP = 3;
+const GAMEOVER = 3;
+const PLAYAGAIN = 4;
 
 //==================
 //---Inisialisasi---
@@ -20,18 +21,28 @@ let bricks = new Queue();
 let brick = new Brick();
 let scale = new THREE.Vector3();
 let position = new THREE.Vector3();
-let command, startPos = 6.5, direction = 'x';
-let hue = 220;
+let command = PLAY, startPos = 6.5, direction = 'x';
+let hue = 0;
+let scoreValue = 0;
+var scoreDisplay = document.getElementById("score");
+var gameoverDisplay = document.getElementById("game-over");
 
 function init() {
+    // Mengatur parameter warna berdasarkan nilai hue-nya
+    hue = Math.floor(Math.random() * 360);
+
+    // Disable view gameover
+    gameoverDisplay.style.display = "none";
+
     // Membuat tumpukan awal hingga
     // bagian bawah tertutupi
     for(let i = -14;i < 0; i++) {
         brick = new Brick({
             position: new THREE.Vector3(0, i, 0),
-            direction: 'z'
+            direction: 'z',
+            color: "hsl(" + hue +", 100%, 50%)"
         });
-    
+
         bricks.push(brick);
         scene.add(brick.build);
     }
@@ -39,7 +50,8 @@ function init() {
     // Tumpukan paling atas
     brick = new Brick({
         position: new THREE.Vector3(0, 0, startPos),
-        direction: 'z'
+        direction: 'z',
+        color: "hsl(" + hue +", 100%, 50%)"
     });
 
     bricks.push(brick);
@@ -56,18 +68,22 @@ function animate() {
 }
 
 function loop() {
+    brick = bricks.back();
     switch (command) {
         // Balok melakukan update
         case PLAY:
-            brick = bricks.back();
             brick.move();
             break;
+
+        case PAUSE:
+            break;
+
         // Balok berhenti, memotong, dan stop
         // sesuai kondisi
         case SPACE:
             brick.stop();
             prevBrick = bricks.get(bricks.size() - 2);
-            
+    
             // Jika balok masih bisa memotong, maka loop lanjut
             if(brick.cut(prevBrick)) {
                 bricks.set(brick);
@@ -105,7 +121,7 @@ function loop() {
                 // Menambahkan balok baru
                 // Membuang balok lama
                 scene.add(topBrick.build);
-                scene.remove(bricks.front().build);
+                scene.remove(bricks.front().name);
                 bricks.pop();
                 bricks.push(topBrick);
                 
@@ -113,17 +129,36 @@ function loop() {
                 // berdasarkan tingkat nilai Hue-nya.
                 hue = (hue + 5) % 360;
 
+                // Update score
+                scoreValue++;
+                scoreDisplay.innerHTML = scoreValue;
+
                 // mengembalikan state menjadi play
                 command = PLAY;
             }
             // Jika balok tidak bisa memotong (game over)
             else {
-                command = STOP;
+                command = GAMEOVER;
             }
             break;
-        case STOP:
-            
+        case GAMEOVER:
+            // Drop semua block
+            for(let i = 0;i < bricks.size(); i++)
+                scene.remove(bricks.items[i].name);
+            bricks.clear();
+
+            // Enable view gameover
+            gameoverDisplay.style.display = "block";
             break;
+        case PLAYAGAIN:
+            // re-inisialisasi semua block
+            init();
+
+            // reset score
+            scoreValue = 0;
+            scoreDisplay.innerHTML = scoreValue;
+
+            command = PLAY;
         default:
             break;
     }
@@ -142,9 +177,17 @@ animate();
 function onKeyDown(event) {
     switch (event.code) {
         case "Space":
-            command = SPACE;
+            if(command == PLAY)
+                command = SPACE;
             break;
-        
+        case "KeyP":
+            if(command == PLAY)
+                command = PAUSE;
+            else if(command == PAUSE)
+                command = PLAY;
+        case "Enter":
+            if(command == GAMEOVER)
+                command = PLAYAGAIN;
         default:
             break;
     }
@@ -168,7 +211,7 @@ function handleOrientation(event) {
         beta: Math.round(event.beta),
         gamma: Math.round(event.gamma)
     }
-    socket.emit('deviceOrientation', orientation);
+    // socket.emit('deviceOrientation', orientation);
 }
 
 window.addEventListener('touchstart', onTouchEvent);

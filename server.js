@@ -28,18 +28,18 @@ app.get('/', function (req, res) {
 //=================
 //-----Socket------
 //=================
-io.on('connection', function(socket) {
-  socket.on('join', function(room) {
-    socket.join(room);
-    socket.on('update', function(data) {
-      console.log(data);
-      // socket.broadcast.to(room).emit('update', data);
-      socket.to(room).emit('update', data);
-      // console.log(data);
-    });
-  });
+// io.on('connection', function(socket) {
+//   socket.on('join', function(room) {
+//     socket.join(room);
+//     socket.on('update', function(data) {
+//       console.log(data);
+//       // socket.broadcast.to(room).emit('update', data);
+//       socket.to(room).emit('update', data);
+//       // console.log(data);
+//     });
+//   });
 
-  socket.on('disconnect', function() {
-    console.log('A user disconnected');
-  });
-});
+//   socket.on('disconnect', function() {
+//     console.log('A user disconnected');
+//   });
+// });

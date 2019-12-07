@@ -46,6 +46,10 @@ class Queue {
     size() {
         return this.items.length;
     }
+
+    clear() {
+        return this.items.length = 0;
+    }
 }
 
 module.exports = Queue;

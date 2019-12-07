@@ -73,14 +73,20 @@ class Scene {
     }
 
     /**
+     * 
      * @param {THREE.Object3D} object 
      */
     add(object) {
         this.scene.add(object);
     }
 
-    remove(object) {
-        this.scene.remove(object);
+    /**
+     * 
+     * @param {String} object Name dari THREE.Object3D 
+     */
+    remove(objectName) {
+        var selectedObject = this.scene.getObjectByName(objectName);
+        this.scene.remove(selectedObject);
     }
 
     render() {

@@ -9,3 +9,28 @@ body {
     background: url(../img/background.jpg) no-repeat center center ;
     background-size: cover;
 }
+
+#score {
+    font-size: 7.5em;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: lighter;
+    color: wheat;
+    position: absolute;
+	top: 10px;
+	width: 100%;
+	text-align: center;
+	display:block;
+}
+
+#game-over {
+    font-size: 3.5em;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+    color: wheat;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    text-align: center;
+    margin: auto;
+	display:none;
+}
