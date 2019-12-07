@@ -81,7 +81,6 @@ function loop() {
         // Balok berhenti, memotong, dan stop
         // sesuai kondisi
         case SPACE:
-            brick.stop();
             prevBrick = bricks.get(bricks.size() - 2);
     
             // Jika balok masih bisa memotong, maka loop lanjut
@@ -198,7 +197,10 @@ function onKeyDown(event) {
  * @param {TouchEvent} event 
  */
 function onTouchEvent(event) {
-    command = SPACE;
+    if(command == PLAY)
+        command = SPACE;
+    else if(command == GAMEOVER)
+        command = PLAYAGAIN;
 }
 
 /**

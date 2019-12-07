@@ -29,8 +29,14 @@ body {
     color: wheat;
     position: absolute;
     width: 100%;
-    top: 50%;
+    top: 40%;
     text-align: center;
     margin: auto;
 	display:none;
+}
+
+@media (max-width: 767px) {
+    #game-over {
+        font-size: 2em;
+    }
 }
