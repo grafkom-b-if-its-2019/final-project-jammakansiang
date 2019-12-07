@@ -1,6 +1,8 @@
 const THREE = require('three');
 
 class Brick {
+    static speed = 0.07;
+
     constructor(param = {}) {
         //===============
         //---Parameter---
@@ -12,7 +14,6 @@ class Brick {
             castShadow: true,
             receiveShadow: true,
             color: "hsl(220, 100%, 50%)",
-            speed: 0.07,
             direction: 'x',
         }
 
@@ -20,6 +21,7 @@ class Brick {
         // ke default parameter agar nilai parameter
         // di dalam class berubah
         this.params = Object.assign(defaultParam, param);
+        this.speed = Brick.speed;
 
         this.geometry = new THREE.BoxGeometry(this.params.size.x, this.params.size.y, this.params.size.z);
         this.material = new THREE.MeshLambertMaterial( { color: this.params.color } );
@@ -30,6 +32,15 @@ class Brick {
         this.mesh.receiveShadow = this.params.receiveShadow;
         this.mesh.position.copy(this.params.position);
         this.mesh.scale.copy(this.params.scale);
+    }
+
+    static increaseSpeed() {
+        Brick.speed += 0.001;
+        this.speed = Brick.speed;
+    }
+
+    static resetSpeed() {
+        Brick.speed = 0.07;
     }
 
     // Karena scene me-render mesh,
@@ -87,14 +98,17 @@ class Brick {
         // Jika ukuran saat ini lebih kecil
         // dari potongannya, maka error / gameover (return false)
         if(curScale.x < Math.abs(diffX) 
-        || curScale.z < Math.abs(diffZ) )
+        || curScale.z < Math.abs(diffZ) ) {
+            Brick.resetSpeed();
             return false;
-
+        }
+            
         curScale.x -= Math.abs(diffX);
         curPosition.x -= (diffX/2);
         curScale.z -= Math.abs(diffZ);
         curPosition.z -= (diffZ/2);
 
+        Brick.increaseSpeed();
         this.scale.copy(curScale);
         return true;
     }
@@ -110,34 +124,30 @@ class Brick {
             // Jika bergerak di-sumbu 'x'
             case 'x':
                 if(this.position.x >= batas || this.position.x <= -batas)
-                    this.params.speed = -this.params.speed;
+                    this.speed = -this.speed;
                     
                 if(this.position.x >= batas)
                     this.position.x = batas;
                 else if(this.position.x <= -batas)
                     this.position.x = -batas;
                 
-                this.position.x += this.params.speed;
+                this.position.x += this.speed;
                 break;
             // Jika bergerak di-sumbu 'z'
             case 'z':
                 if(this.position.z >= batas || this.position.z <= -batas)
-                    this.params.speed = -this.params.speed;
+                    this.speed = -this.speed;
                     
                 if(this.position.z >= batas)
                     this.position.z = batas;
                 else if(this.position.z <= -batas)
                     this.position.z = -batas;
                 
-                this.mesh.position.z += this.params.speed;
+                this.mesh.position.z += this.speed;
                 break;
             default:
                 break;
         }
-    }
-
-    stop() {
-        this.params.speed = 0;
     }
 
 }
