@@ -2,6 +2,7 @@ const THREE = require('three');
 const Scene = require('./scene');
 const Brick = require('./brick');
 const Queue = require('./queue');
+const socket = require('socket.io-client')(window.location.host);
 
 //==================
 //--Define command--
@@ -59,7 +60,6 @@ function loop() {
     brick.move();
 
     if(command == SPACE) {
-
         prevBrick = bricks.get(bricks.size() - 2);
         brick.stop();
         if(!brick.cut(prevBrick))

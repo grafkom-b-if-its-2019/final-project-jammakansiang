@@ -1,7 +1,8 @@
-/*
-* Queue ini untuk melakukan
-* pop: pada brick yang sudah tidak terlihat (dibawah)
-* push: menambahkan diatasnya
+/**
+ * @classdesc Queue ini untuk melakukan
+ * pop: pada brick yang sudah tidak terlihat (dibawah)
+ * push: menambahkan diatasnya
+ * sesuai FIFO
 */
 
 const Brick = require('./brick');
