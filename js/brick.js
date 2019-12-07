@@ -64,7 +64,7 @@ class Brick {
     }
 
     /**
-     * @param {Brick} prevBrick 
+     * @param {Brick} prevBrick Balok sebagai perbandingan saat ini dengan sebelumnya
      * @returns {boolean} Kondisi apakah dia masih bisa memotong atau tidak
      */
     cut(prevBrick)

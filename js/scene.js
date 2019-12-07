@@ -8,7 +8,7 @@ class Scene {
         //===============
         var defaultParam = {
             camera: {
-                depth: 300,
+                depth: 64,
                 near: -50,
                 far: 1000,
                 position: new THREE.Vector3(2, 2, 2),
@@ -30,27 +30,25 @@ class Scene {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.shadowMap.enabled = true;
-        // document.body.appendChild( this.renderer.domElement );
 
         //================
         //-----Camera-----
         //================
         const cameraConfig = this.params.camera;
-        const aspect = Window.innerWidth / Window.innerHeight;
         const depth = cameraConfig.depth;
-        const viewSize = 64;
+        const frustumSize = 64;
         // this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // this.camera.position.y = 1;
         // this.camera.position.z = 5;
         
-        this.camera = new THREE.OrthographicCamera(depth * aspect / -2, depth * aspect / 2, depth / 2, depth / -2, cameraConfig.near, cameraConfig.far);
+        this.camera = new THREE.OrthographicCamera(depth / -2, depth / 2, depth / 2, depth / -2, cameraConfig.near, cameraConfig.far);
         this.camera.position.copy(cameraConfig.position);
         this.camera.lookAt(new THREE.Vector3().fromArray(cameraConfig.lookAt));
         
-        this.camera.left = window.innerWidth / - viewSize;
-        this.camera.right = window.innerWidth / viewSize;
-        this.camera.top = window.innerHeight / viewSize;
-        this.camera.bottom = window.innerHeight / - viewSize;
+        this.camera.left = window.innerWidth / - frustumSize;
+        this.camera.right = window.innerWidth / frustumSize;
+        this.camera.top = window.innerHeight / frustumSize;
+        this.camera.bottom = window.innerHeight / - frustumSize;
         this.camera.updateProjectionMatrix();
 
         // var cameraHelper = new THREE.CameraHelper(this.camera);
@@ -90,13 +88,13 @@ class Scene {
     }
 
     onWindowResize() {
-        const viewSize = 64;
+        const frustumSize = 64;
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
-        this.camera.left = window.innerWidth / - viewSize;
-        this.camera.right = window.innerWidth / viewSize;
-        this.camera.top = window.innerHeight / viewSize;
-        this.camera.bottom = window.innerHeight / - viewSize;
+        this.camera.left = window.innerWidth / - frustumSize;
+        this.camera.right = window.innerWidth / frustumSize;
+        this.camera.top = window.innerHeight / frustumSize;
+        this.camera.bottom = window.innerHeight / - frustumSize;
         this.camera.updateProjectionMatrix();
     }
 }

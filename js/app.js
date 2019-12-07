@@ -56,50 +56,76 @@ function animate() {
 }
 
 function loop() {
-    brick = bricks.back();
-    brick.move();
+    switch (command) {
+        // Balok melakukan update
+        case PLAY:
+            brick = bricks.back();
+            brick.move();
+            break;
+        // Balok berhenti, memotong, dan stop
+        // sesuai kondisi
+        case SPACE:
+            brick.stop();
+            prevBrick = bricks.get(bricks.size() - 2);
+            
+            // Jika balok masih bisa memotong, maka loop lanjut
+            if(brick.cut(prevBrick)) {
+                bricks.set(brick);
+    
+                // Untuk setiap stepnya, balok yang lama turun 1 kotak
+                for(let i = 0;i < bricks.size(); i++)
+                    bricks.items[i].down();
 
-    if(command == SPACE) {
-        prevBrick = bricks.get(bricks.size() - 2);
-        brick.stop();
-        if(!brick.cut(prevBrick))
-            command = STOP;
+                // Jika balok berjalan di-arah x,
+                // mengatur direction menjadi 'x'
+                if(direction == 'x') {
+                    var topBrick = new Brick({
+                        position: new THREE.Vector3(-startPos, 0, brick.position.z),
+                        scale: new THREE.Vector3(brick.scale.x, brick.scale.y, brick.scale.z),
+                        color: "hsl(" + hue +", 100%, 50%)",
+                        direction: direction
+                    });
+                    // Update agar variasi
+                    direction = 'z';
+                    startPos = -startPos;
+                }
+                // Jika balok berjalan di-arah x,
+                // mengatur direction menjadi 'x'
+                else if(direction == 'z') {
+                    var topBrick = new Brick({
+                        position: new THREE.Vector3(brick.position.x, 0, startPos),
+                        scale: new THREE.Vector3(brick.scale.x, brick.scale.y, brick.scale.z),
+                        color: "hsl(" + hue +", 100%, 50%)",
+                        direction: direction
+                    });
+                    // Update agar variasi
+                    direction = 'x';
+                }
+        
+                // Menambahkan balok baru
+                // Membuang balok lama
+                scene.add(topBrick.build);
+                scene.remove(bricks.front().build);
+                bricks.pop();
+                bricks.push(topBrick);
+                
+                // Mengatur parameter warna agar dinamis,
+                // berdasarkan tingkat nilai Hue-nya.
+                hue = (hue + 5) % 360;
 
-        bricks.set(brick);
-
-        // Untuk setiap stepnya, balok yang lama turun 1 kotak
-        for(let i = 0;i < bricks.size(); i++)
-            bricks.items[i].down();
-
-        if(direction == 'x') {
-            var topBrick = new Brick({
-                position: new THREE.Vector3(-startPos, 0, brick.position.z),
-                scale: new THREE.Vector3(brick.scale.x, brick.scale.y, brick.scale.z),
-                color: "hsl(" + hue +", 100%, 50%)",
-                direction: direction
-            });
-            direction = 'z';
-            startPos = -startPos;
-        }
-        else if(direction == 'z') {
-            var topBrick = new Brick({
-                position: new THREE.Vector3(brick.position.x, 0, startPos),
-                scale: new THREE.Vector3(brick.scale.x, brick.scale.y, brick.scale.z),
-                color: "hsl(" + hue +", 100%, 50%)",
-                direction: direction
-            });
-            direction = 'x';
-        }
-
-        // Menambahkan balok baru
-        // Membuang balok lama
-        scene.add(topBrick.build);
-        scene.remove(bricks.front().build);
-        bricks.pop();
-        bricks.push(topBrick);
-
-        hue = (hue + 5) % 360;
-        command = PLAY;
+                // mengembalikan state menjadi play
+                command = PLAY;
+            }
+            // Jika balok tidak bisa memotong (game over)
+            else {
+                command = STOP;
+            }
+            break;
+        case STOP:
+            
+            break;
+        default:
+            break;
     }
 
     scene.render();
