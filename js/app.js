@@ -179,6 +179,8 @@ function onKeyDown(event) {
         case "Space":
             if(command == PLAY)
                 command = SPACE;
+                var spasi = new Audio('../sound/spasi.mp3');
+                spasi.play();
             break;
         case "KeyP":
             if(command == PLAY)
@@ -199,9 +201,14 @@ function onKeyDown(event) {
  */
 function onTouchEvent(event) {
     if(command == PLAY)
+    {
         command = SPACE;
+    }
     else if(command == GAMEOVER)
+    {
         command = PLAYAGAIN;
+    }
+        
 }
 
 /**
@@ -231,17 +238,3 @@ function nambahsound(){
         }, false);
     myAudio.play();
 }
-
-// var listener = new THREE.AudioListener();
-// camera.add( listener );
-// // create a global audio source
-// var sound = new THREE.Audio( listener );
-
-// // load a sound and set it as the Audio object's buffer
-// var audioLoader = new THREE.AudioLoader();
-// audioLoader.load( 'sound/ingame.mp3', function( buffer ) {
-// 	sound.setBuffer( buffer );
-// 	sound.setLoop( true );
-// 	sound.setVolume( 0.5 );
-// 	sound.play();
-// });
