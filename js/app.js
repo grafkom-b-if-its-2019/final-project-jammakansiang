@@ -26,6 +26,7 @@ let hue = 0;
 let scoreValue = 0;
 var scoreDisplay = document.getElementById("score");
 var gameoverDisplay = document.getElementById("game-over");
+var isPlay=0;
 
 function init() {
     // Mengatur parameter warna berdasarkan nilai hue-nya
@@ -56,7 +57,6 @@ function init() {
 
     bricks.push(brick);
     scene.add(brick.build);
-    nambahsound()
 }
 init();
 
@@ -135,10 +135,13 @@ function loop() {
 
                 // mengembalikan state menjadi play
                 command = PLAY;
+                nambahlagu();
             }
             // Jika balok tidak bisa memotong (game over)
             else {
                 command = GAMEOVER;
+                var gameover = new Audio('../sound/gameover.mp3');
+                gameover.play();
             }
             break;
         case GAMEOVER:
@@ -228,13 +231,19 @@ window.addEventListener('touchstart', onTouchEvent);
 window.addEventListener('keydown', onKeyDown);
 window.addEventListener('deviceorientation', handleOrientation);
 
-//sound menambah lagu
-
-function nambahsound(){
-    var myAudio = new Audio('../sound/ingame.mp3');
-    myAudio.addEventListener('ended', function() {
-        this.currentTime = 0;
-        this.play();
-        }, false);
-    myAudio.play();
+function stoplagu()
+{
+    isPlay=1;
 }
+function nambahlagu(){
+    if(isPlay==0)
+    {
+        var myAudio = new Audio('../sound/ingame.mp3');
+        myAudio.addEventListener('ended', function() {
+            this.currentTime = 0;
+            this.play();
+            }, false);
+        myAudio.play();
+    }
+}
+
