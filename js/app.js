@@ -28,6 +28,7 @@ var scoreDisplay = document.getElementById("score");
 var gameoverDisplay = document.getElementById("game-over");
 var isPlay=0;
 var myAudio = new Audio('../sound/ingame.mp3');
+var geoo;
 
 function init() {
     // Mengatur parameter warna berdasarkan nilai hue-nya
@@ -243,5 +244,30 @@ function nambahlagu(){
         myAudio.stop();
         console.log("aaa");
     }
+}
+
+//font
+function tulisan(){
+    var loader = new THREE.FontLoader();
+
+    loader.load( '../fonts/perfect.typeface.json', function ( font ) {
+    
+        var geometry = new THREE.TextGeometry( 'Perfect', {
+            font: font,
+            size: 80,
+            height: 5,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 10,
+            bevelSize: 8,
+            bevelOffset: 0,
+            bevelSegments: 5
+        } );
+    } );
+
+    geoo= createMesh(geometry);
+    geoo.position.x=100;
+    geoo.position.y=100;
+    scene.add(geoo);
 }
 
