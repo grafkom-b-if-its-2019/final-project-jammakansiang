@@ -219,3 +219,11 @@ function handleOrientation(event) {
 window.addEventListener('touchstart', onTouchEvent);
 window.addEventListener('keydown', onKeyDown);
 window.addEventListener('deviceorientation', handleOrientation);
+
+//sound menambah lagu
+var myAudio = new Audio('../sound/ingame.mp3');
+myAudio.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+    }, false);
+myAudio.play();

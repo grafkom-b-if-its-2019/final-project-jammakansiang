@@ -12,9 +12,15 @@
     <div id="score">0</div>
     <div id="game-over"><strong>GAME OVER</strong><br>Tekan 'ENTER' untuk main lagi</div>
     <canvas id="c"></canvas>
-
-
-
+    
     <script src="build/bundle.js"></script>
+
+    <audio id="my_audio" src="sound/ingame.mp3" loop="loop"></audio>
+    <script>
+      window.onload = function() {
+          document.getElementById("my_audio").play();
+      }
+  </script>
+    
 </body>
 </html>
