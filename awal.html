@@ -1,28 +1,30 @@
 <link rel="icon" href="img/favicon.png" type="png" sizes="16x16">
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>Ditumpuk Game</title>
-<style>
-	body {
-  		background-image: url("img/bg.jpg");
-  		background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-	}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Ditumpuk Game</title>
+  <style>
+    body {
+        background-image: url("img/bg.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
 
-	.img-container {
-        text-align: center;
-        display: block;
-        margin-top: 150px;
-      }
+    .img-container {
+          text-align: center;
+          display: block;
+          margin-top: 150px;
+        }
 
-      .img-container-2 {
-        text-align: center;
-        display: block;
-      }
-</style>
+        .img-container-2 {
+          text-align: center;
+          display: block;
+        }
+  </style>
 </head>
 
 <body>
@@ -39,11 +41,11 @@
     <span class="img-container-2"> 
       <a href="/instruksi"><img style="width:300px;" src="img/caramain.png" alt=""></a>
     </span>
-    <audio id="my_audio" src="sound/ingame.mp3" loop="loop"></audio>
-    <script>
+    <iframe id="my_audio" src="sound/ingame.mp3" type="audio/mpeg" loop="loop" allow="autoplay">gabisa</iframe>
+    <!-- <script>
       window.onload = function() {
-          document.getElementById("my_audio").play();
+        document.getElementById("my_audio").play();
       }
-  </script>
+    </script> -->
 </body>
 </html>
