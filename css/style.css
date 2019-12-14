@@ -14,12 +14,14 @@ body {
     font-size: 7.5em;
     font-family: 'Courier New', Courier, monospace;
     font-weight: lighter;
-    color: wheat;
+    color: white;
     position: absolute;
 	top: 10px;
 	width: 100%;
 	text-align: center;
-	display:block;
+    display:block;
+    font-weight: bold;
+    text-shadow: 5px 5px #2915A7;
 }
 
 #game-over {
@@ -34,6 +36,17 @@ body {
     margin: auto;
 	display:none;
 }
+
+.img-container {
+    text-align: center;
+    display: block;
+    margin-top: 150px;
+  }
+
+  .img-container-2 {
+    text-align: center;
+    display: block;
+  }
 
 @media (max-width: 767px) {
     #game-over {
