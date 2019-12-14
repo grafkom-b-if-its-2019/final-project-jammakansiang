@@ -22,7 +22,7 @@ server.listen(app.get('port'), function () {
 //-----Routing------
 //==================
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/awal.html');
 });
 
 //=================
