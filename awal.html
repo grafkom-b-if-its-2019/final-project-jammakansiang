@@ -39,7 +39,9 @@
     <span class="img-container-2"> 
       <a href="/instruksi"><img style="width:300px;" src="img/caramain.png" alt=""></a>
     </span>
-    <audio id="my_audio" src="sound/ingame.mp3" loop="loop"></audio>
+    <audio autoplay> 
+      <source src= "sound/ingame.mp3" type="audio/mpeg ">  
+  </audio> 
     <script>
       window.onload = function() {
           document.getElementById("my_audio").play();

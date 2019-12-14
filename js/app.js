@@ -56,6 +56,7 @@ function init() {
 
     bricks.push(brick);
     scene.add(brick.build);
+    nambahsound()
 }
 init();
 
@@ -221,9 +222,26 @@ window.addEventListener('keydown', onKeyDown);
 window.addEventListener('deviceorientation', handleOrientation);
 
 //sound menambah lagu
-var myAudio = new Audio('../sound/ingame.mp3');
-myAudio.addEventListener('ended', function() {
-    this.currentTime = 0;
-    this.play();
-    }, false);
-myAudio.play();
+
+function nambahsound(){
+    var myAudio = new Audio('../sound/ingame.mp3');
+    myAudio.addEventListener('ended', function() {
+        this.currentTime = 0;
+        this.play();
+        }, false);
+    myAudio.play();
+}
+
+// var listener = new THREE.AudioListener();
+// camera.add( listener );
+// // create a global audio source
+// var sound = new THREE.Audio( listener );
+
+// // load a sound and set it as the Audio object's buffer
+// var audioLoader = new THREE.AudioLoader();
+// audioLoader.load( 'sound/ingame.mp3', function( buffer ) {
+// 	sound.setBuffer( buffer );
+// 	sound.setLoop( true );
+// 	sound.setVolume( 0.5 );
+// 	sound.play();
+// });

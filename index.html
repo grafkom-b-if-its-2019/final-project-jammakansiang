@@ -19,11 +19,14 @@
         </span>
     </div>
     <canvas id="c"></canvas>
+    <script src="build/bundle.js"></script>
+
+    <audio id="my_audio" src="sound/ingame.mp3" loop="loop"></audio>
+    <script>
+      window.onload = function() {
+          document.getElementById("my_audio").play();
+      }
+  </script>
     
-    <script src="build/bundle.js"></script>
-
-
-
-    <script src="build/bundle.js"></script>
 </body>
 </html>
