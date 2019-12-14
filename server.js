@@ -22,7 +22,15 @@ server.listen(app.get('port'), function () {
 //-----Routing------
 //==================
 app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/awal.html');
+});
+
+app.get('/game', function (req, res) {
   res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/start', function (req, res) {
+  res.sendFile(__dirname + '/awal.html');
 });
 
 //=================
