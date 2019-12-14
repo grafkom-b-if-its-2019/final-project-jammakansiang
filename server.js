@@ -37,10 +37,6 @@ app.get('/instruksi', function (req, res) {
   res.sendFile(__dirname + '/instruksi.html');
 });
 
-app.get('/end', function (req, res) {
-  res.sendFile(__dirname + '/over.html');
-});
-
 //=================
 //-----Socket------
 //=================
