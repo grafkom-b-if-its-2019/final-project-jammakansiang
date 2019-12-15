@@ -43,18 +43,18 @@ function init() {
     gameoverDisplay.style.display = "none";
 
     // Membuat ground tempat pijakan balok
-    var ground_material = Physijs.createMaterial(
-        new THREE.MeshLambertMaterial({color: 0xffffff}),
-        1.,
-        0,1
-    );
-    var ground = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(5, 1, 5),
-        ground_material,
-        0
-    );
-    ground.position.set(0,-13.5,0);
-    scene.add(ground);
+    // var ground_material = Physijs.createMaterial(
+    //     new THREE.MeshLambertMaterial({color: 0xffffff}),
+    //     1.,
+    //     0,1
+    // );
+    // var ground = new Physijs.BoxMesh(
+    //     new THREE.BoxGeometry(5, 1, 5),
+    //     ground_material,
+    //     0
+    // );
+    // ground.position.set(0,-13.5,0);
+    // scene.add(ground);
 
     // Membuat tumpukan awal hingga
     // bagian bawah tertutupi
@@ -190,7 +190,8 @@ function loop() {
             spawnBox();
             
             // Jika balok masih bisa memotong, maka loop lanjut
-            if(brick.cut(prevBrick)) {
+            var cutted_brick = brick.cut(prevBrick);
+            if(cutted_brick[0]) {
                 // Balok baru berupa potongan akan dapat efek Physijs
                 // var fallingbrick = new FallingBrick(prevBrick.params);
                 // fallingbricks.push(fallingbrick);
@@ -241,6 +242,9 @@ function loop() {
 
                 // Update score
                 scoreValue++;
+                if(cutted_brick[5]==true){
+                    scoreValue++;
+                }
                 scoreDisplay.innerHTML = scoreValue;
 
                 // mengembalikan state menjadi play
@@ -371,7 +375,6 @@ function nambahlagu(){
     else if (isPlay==1)
     {
         myAudio.stop();
-        console.log("aaa");
     }
 }
 

@@ -8,6 +8,7 @@ class Brick {
         //===============
         //---Parameter---
         //===============
+        var perfect = document.getElementById("perfect");
         var defaultParam = {
             size: new THREE.Vector3(1, 1, 1),
             position: new THREE.Vector3(0, 0, 0),
@@ -136,15 +137,33 @@ class Brick {
      */
     cut(prevBrick)
     {
+        console.log(this.color);
+        var mantap = false;
         var prevPosition = prevBrick.position;
+        prevPosition.x = Number((prevPosition.x).toFixed(1));
+        prevPosition.y = Number((prevPosition.y).toFixed(1));
+        prevPosition.z = Number((prevPosition.z).toFixed(1));
+       
         var curScale = this.scale;
+        curScale.x = Number((curScale.x).toFixed(1));
+        curScale.y = Number((curScale.y).toFixed(1));
+        curScale.z = Number((curScale.z).toFixed(1));
+        
         var curPosition = this.position;
+        curPosition.x = Number((curPosition.x).toFixed(1));
+        curPosition.y = Number((curPosition.y).toFixed(1));
+        curPosition.z = Number((curPosition.z).toFixed(1));
         
         var diffX = curPosition.x - prevPosition.x;
         var diffZ = curPosition.z - prevPosition.z;
 
-        console.log("x : " + diffX, curScale.x);
-        console.log("Z : " + diffZ, curScale.z);
+        // console.log("x : " + diffX, curScale.x);
+        // console.log("Z : " + diffZ, curScale.z);
+
+        if(diffX==0 && diffZ==0){
+            perfect.style.opacity = 1.0;
+            mantap = true;
+        }
 
         // Jika ukuran saat ini lebih kecil
         // dari potongannya, maka error / gameover (return false)
@@ -152,7 +171,7 @@ class Brick {
         || curScale.z < Math.abs(diffZ) ) {
             this.disabledMass();
             Brick.resetSpeed();
-            return false;
+            return [false, prevPosition, curScale, curPosition, this.color, mantap];
         }
             
         curScale.x -= Math.abs(diffX);
@@ -162,7 +181,7 @@ class Brick {
 
         Brick.increaseSpeed();
         this.scale.copy(curScale);
-        return true;
+        return [true, prevPosition, curScale, curPosition, this.color, mantap];
     }
 
     /** 
@@ -170,10 +189,13 @@ class Brick {
      * pada sumbu cartesian 'x' dan 'z'
      */
     move() {
+        if(perfect.style.opacity>0){
+            perfect.style.opacity-=0.03;
+        }
         const batas = 6.5;
 
-        console.log("x : " + this.position.x);
-        console.log("Z : " + this.position.y);
+        // console.log("x : " + this.position.x);
+        // console.log("Z : " + this.position.y);
 
         switch (this.params.direction) {
             // Jika bergerak di-sumbu 'x'
