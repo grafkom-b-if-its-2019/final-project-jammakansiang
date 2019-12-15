@@ -7,9 +7,6 @@
   <link rel="icon" type="image/png" href="../img/favicon.png" />
   <title>Ditumpuk Game</title>
   <style>
-    @media only screen and (min-width: 1440px) {
-    /* styles for MacBook Pro-sized screens and larger */
-  }
     body {
       margin :0;
       padding:0;
@@ -35,15 +32,6 @@
     background: rgb(117,188,220);
     background: linear-gradient(90deg, rgba(117,188,220,1) 0%, rgba(214,172,163,1) 50%, rgba(192,141,255,1) 100%);
   }
-    @media only screen and (max-width: 320px) {
-      #particles-js{
-        /* height:110vh; */
-        background: rgb(117,188,220);
-        background: linear-gradient(90deg, rgba(117,188,220,1) 0%, rgba(214,172,163,1) 50%, rgba(192,141,255,1) 100%);
-  }
-
-    
-}
   </style>
 
 </head>
@@ -67,10 +55,11 @@
   <!-- source particle nya -->
   <script type="text/javascript" src="../particle/particles.js"></script>
   <script type="text/javascript" src="../particle/app.js"></script>
+
+  <!-- sound -->
   <audio autoplay> 
     <source src= "../sound/awal.mp3" type="audio/mpeg ">  
   </audio> 
-
   <script>
     window.onload = function() {
       document.getElementById("my_audio").play();
