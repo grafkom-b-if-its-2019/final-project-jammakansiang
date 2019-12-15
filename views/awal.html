@@ -10,12 +10,10 @@
     body {
       margin :0;
       padding:0;
-      height:auto;
     }
 
     #semua{
       position:absolute;
-
     }
 
     .img-container {
@@ -30,13 +28,16 @@
       
     }
     #particles-js{
-    height :100%;
+    height:100vh;
     background: rgb(117,188,220);
-    background: linear-gradient(90deg, rgba(117,188,220,1) 0%, rgba(214,172,163,1) 50%, rgba(192,141,255,1) 100%);}
+    background: linear-gradient(90deg, rgba(117,188,220,1) 0%, rgba(214,172,163,1) 50%, rgba(192,141,255,1) 100%);
+  }
   </style>
+
 </head>
 
 <body>
+  <!-- menambah particle -->
   <div id="particles-js">
     <div id="semua">
       <span class="img-container"> 
@@ -45,24 +46,20 @@
       <span class="img-container-2"> 
         <a href="/game"><img style="width:300px;" src="../img/mulaibaru.png" alt=""></a>
       </span>
-    
       <span class="img-container-2"> 
         <a href="/instruksi"><img style="width:300px;" src="../img/caramain.png" alt=""></a>
       </span>
     </div>
     
   </div>
-  <!-- menambah particle -->
+  <!-- source particle nya -->
   <script type="text/javascript" src="../particle/particles.js"></script>
   <script type="text/javascript" src="../particle/app.js"></script>
 
-
-  
-
+  <!-- sound -->
   <audio autoplay> 
     <source src= "../sound/awal.mp3" type="audio/mpeg ">  
   </audio> 
-
   <script>
     window.onload = function() {
       document.getElementById("my_audio").play();
