@@ -30,32 +30,31 @@ class Brick {
         // Physics mesh
         this.physijs_material = Physijs.createMaterial(
             this.material,
-            .7,
-            .5
+            .7, // gaya gesek
+            .5 // gaya mantul
         );
-        // this.physijs_box = new Physijs.BoxMesh(
-        //     this.geometry,
-        //     this.physijs_material,
-        //     0
-        // );
+        this.physijs_box = new Physijs.BoxMesh(
+            this.geometry,
+            this.physijs_material,
+            0
+        );
+        this.physijs_box.collisions = 0;
+        this.physijs_box.setAngularVelocity(new THREE.Vector3(0, 0, 0));
+        this.physijs_box.setLinearVelocity(new THREE.Vector3(0, 0, 0));
+        this.physijs_box.name = this.physijs_box.uuid;
+        this.physijs_box.castShadow = this.params.castShadow;
+        this.physijs_box.receiveShadow = this.params.receiveShadow;
+        this.physijs_box.position.copy(this.params.position);
+        this.physijs_box.scale.copy(this.params.scale);
         // this.physijs_box.__dirtyPosition = true;
         // this.physijs_box.__dirtyRotation = true;
-        // this.physijs_box.collisions = 0;
-        // this.physijs_box.setAngularVelocity(new THREE.Vector3(0, 0, 0));
-        // this.physijs_box.setLinearVelocity(new THREE.Vector3(0, 0, 0));
-        // this.physijs_box.name = this.physijs_box.uuid;
-        // this.physijs_box.castShadow = this.params.castShadow;
-        // this.physijs_box.receiveShadow = this.params.receiveShadow;
-        // this.physijs_box.position.copy(this.params.position);
-        // this.physijs_box.scale.copy(this.params.scale);
-        // console.log(this.physijs_box);
 
-        this.mesh = new THREE.Mesh( this.geometry, this.material );
-        this.mesh.name = this.mesh.uuid;
-        this.mesh.castShadow = this.params.castShadow;
-        this.mesh.receiveShadow = this.params.receiveShadow;
-        this.mesh.position.copy(this.params.position);
-        this.mesh.scale.copy(this.params.scale);
+        // this.mesh = new THREE.Mesh( this.geometry, this.material );
+        // this.mesh.name = this.mesh.uuid;
+        // this.mesh.castShadow = this.params.castShadow;
+        // this.mesh.receiveShadow = this.params.receiveShadow;
+        // this.mesh.position.copy(this.params.position);
+        // this.mesh.scale.copy(this.params.scale);
     }
 
     static increaseSpeed() {
@@ -70,12 +69,13 @@ class Brick {
     // Karena scene me-render mesh,
     // agar lebih mudah memanggilnya dibuat fungsi saja
     get build() {
-        return this.mesh;
-        // return this.physijs_box;
+        //return this.mesh;
+        return this.physijs_box;
     }
 
     get color() {
-        return this.material.color.getHSL();
+    //     return this.material.color.getHSL();
+        return this.physijs_material.color.getHSL();
     }
 
     /**
@@ -86,13 +86,14 @@ class Brick {
     }
 
     get name() {
-        return this.mesh.name;
-        // return this.physijs_box.name;
+        // return this.mesh.name;
+        return this.physijs_box.name;
     }
 
     get position() {
-        return this.mesh.position;
-        // return this.physijs_box.position;
+        // return this.mesh.position;
+        this.physijs_box.__dirtyPosition = true;
+        return this.physijs_box.position;
     }
 
     /**
@@ -103,8 +104,8 @@ class Brick {
     }
 
     get scale() {
-        return this.mesh.scale;
-        // return this.physijs_box.scale;
+        // return this.mesh.scale;
+        return this.physijs_box.scale;
     }
 
     /**
@@ -115,8 +116,9 @@ class Brick {
     }
 
     down() {
-        this.mesh.position.y -= 1;
-        // this.physijs_box.position.y -= 1;
+        // this.mesh.position.y -= 1;
+        this.physijs_box.__dirtyPosition = true
+        this.physijs_box.position.y -= 1;
     }
 
     /**
@@ -180,36 +182,45 @@ class Brick {
     move() {
         const batas = 6.5;
 
+        console.log("x : " + this.position.x);
+        console.log("Z : " + this.position.y);
+
         switch (this.params.direction) {
             // Jika bergerak di-sumbu 'x'
             case 'x':
-                if(this.mesh.position.x >= batas || this.mesh.position.x <= -batas)
+                // if(this.mesh.position.x >= batas || this.mesh.position.x <= -batas)
+                if(this.physijs_box.position.x >= batas || this.physijs_box.position.x <= -batas)
                     this.speed = -this.speed;
                     
-                if(this.mesh.position.x >= batas)
-                    // this.position.x = batas;
-                    this.mesh.position.x = batas;
-                else if(this.mesh.position.x <= -batas)
-                    // this.position.x = -batas;
-                    this.mesh.position.x = -batas;
+                // if(this.mesh.position.x >= batas)
+                if(this.physijs_box.position.x >= batas)
+                    this.position.x = batas;
+                    // this.mesh.position.x = batas;
+                // else if(this.mesh.position.x <= -batas)
+                else if(this.physijs_box.position.x <= -batas)
+                    this.position.x = -batas;
+                    // this.mesh.position.x = -batas;
                 
-                this.mesh.position.x += this.speed;
-                // this.physijs_box.position.x += this.speed;
+                // this.mesh.position.x += this.speed;
+                this.physijs_box.position.x += this.speed;
                 break;
             // Jika bergerak di-sumbu 'z'
             case 'z':
-                if(this.mesh.position.z >= batas || this.mesh.position.z <= -batas)
+                // if(this.mesh.position.z >= batas || this.mesh.position.z <= -batas)
+                if(this.physijs_box.position.z >= batas || this.physijs_box.position.z <= -batas)
                     this.speed = -this.speed;
                     
-                if(this.mesh.position.z >= batas)
-                    // this.position.z = batas;
-                    this.mesh.position.z = batas;
-                else if(this.mesh.position.z <= -batas)
-                    // this.position.z = -batas;
-                    this.mesh.position.z = -batas;
+                // if(this.mesh.position.z >= batas)
+                if(this.physijs_box.position.z >= batas)
+                    this.position.z = batas;
+                    // this.mesh.position.z = batas;
+                // else if(this.mesh.position.z <= -batas)
+                else if(this.physijs_box.position.z <= -batas)
+                    this.position.z = -batas;
+                    // this.mesh.position.z = -batas;
                 
-                this.mesh.position.z += this.speed;
-                // this.physijs_box.position.z += this.speed;
+                // this.mesh.position.z += this.speed;
+                this.physijs_box.position.z += this.speed;
                 break;
             default:
                 break;
