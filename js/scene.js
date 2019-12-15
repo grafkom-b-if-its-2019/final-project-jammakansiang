@@ -30,8 +30,8 @@ class Scene {
         var canvas = document.querySelector('#c');
         canvas.style.position = 'absolute';
         canvas.style.left = `${ (window.innerWidth / this.params.maxPlayer) * (this.params.numPlayer - 1)}px`;
-        
-        this.renderer = new THREE.WebGLRenderer({canvas, alpha:true});
+
+        this.renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha:true});
         this.renderer.setSize(window.innerWidth / this.params.maxPlayer, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.shadowMap.enabled = true;

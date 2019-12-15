@@ -2,7 +2,7 @@ const THREE = require('three');
 const Scene = require('./scene');
 const Brick = require('./brick');
 const Queue = require('./queue');
-// const socket = require('socket.io-client')(window.location.host);
+const socket = require('socket.io-client')(window.location.host);
 
 //==================
 //--Define command--
@@ -26,6 +26,7 @@ let hue = 0;
 let scoreValue = 0;
 var scoreDisplay = document.getElementById("score");
 var gameoverDisplay = document.getElementById("game-over");
+var playagainButton = document.getElementById("playagain");
 var isPlay=0;
 var myAudio = new Audio('../sound/ingame.mp3');
 var geoo;
@@ -65,16 +66,16 @@ init();
 //=======================
 //-----Socket client-----
 //=======================
-// const roomName = 'nganu';
-// socket.emit('join', roomName);
-// //-----------------------
-// socket.on('keyboardEvent', function(data) {
-//     console.log(data);
-// });
+const roomName = 'nganu';
+socket.emit('join', roomName);
+//-----------------------
+socket.on('keyboardEvent', function(data) {
+    console.log(data);
+});
 
-// socket.on('deviceOrientation', function(data) {
-//     console.log(data);
-// });
+socket.on('deviceOrientation', function(data) {
+    console.log(data);
+});
 
 // socket.on('sync', function(data) {
 //     // console.log(data);
@@ -101,15 +102,20 @@ function loop() {
             brick.move();
 
             let message = {
-                position: new Array(),
-                scale: new Array()
+                score: scoreValue,
+                property: []
+            };
+            
+            for(let i = 0;i < bricks.size(); i++) {
+                let object = {
+                    position: bricks.items[i].position,
+                    scale: bricks.items[i].scale,
+                    color: bricks.items[i].color
+                };
+                message.property.push(object);
             }
 
-            for(let i = 0;i < bricks.size(); i++) {
-                message.position.push(bricks.items[i].position);
-                message.scale.push(bricks.items[i].scale);
-            }
-            // socket.emit('sync', message);
+            socket.emit('sync', message);
             nambahlagu();
             break;
 
@@ -188,6 +194,10 @@ function loop() {
 
             // Enable view gameover
             gameoverDisplay.style.display = "block";
+            playagainButton.onclick = function() {
+                command = PLAYAGAIN;
+            }
+
             break;
         case PLAYAGAIN:
             // re-inisialisasi semua block

@@ -5,10 +5,14 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "browserifyinc --cachefile build/browserify-cache.json js/app.js -o build/bundle.js --debug -v",
-    "build": "browserify js/app.js -o build/bundle.js --debug -v",
+    "compile:app": "browserifyinc --cachefile build/browserify-cache.json js/app.js -o build/bundle.js --debug -v",
+    "compile:master": "browserifyinc --cachefile build/browserify-cache-master.json js/master.js -o build/bundle-master.js --debug -v",
+    "build:app" : "browserify js/app.js -o build/bundle.js --debug -v",
+    "build:master": "browserify js/master.js -o build/bundle-master.js --debug -v",
+    "build": "npm --silent run build:app & npm --silent run build:master",
+    
     "dev": "nodemon --exec \"npm --silent start\" --ignore build",
-    "start": "npm run compile & node server.js"
+    "start": "npm run compile:app & npm run compile:master & node server.js"
   },
   "repository": {
     "type": "git",
