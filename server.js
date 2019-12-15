@@ -15,6 +15,7 @@ app.use('/img',express.static(path.join(__dirname, 'img')));
 app.use('/js',express.static(path.join(__dirname, 'js')));
 app.use('/sound',express.static(path.join(__dirname, 'sound')));
 app.use('/fonts',express.static(path.join(__dirname, 'fonts')));
+app.use('/particle',express.static(path.join(__dirname, 'particle')));
 
 server.listen(app.get('port'), function () {
   console.log("Express server listening on port " + app.get('port'));
