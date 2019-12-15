@@ -13,6 +13,8 @@ app.use('/build',express.static(path.join(__dirname, 'build')));
 app.use('/css',express.static(path.join(__dirname, 'css')));
 app.use('/img',express.static(path.join(__dirname, 'img')));
 app.use('/js',express.static(path.join(__dirname, 'js')));
+app.use('/sound',express.static(path.join(__dirname, 'sound')));
+app.use('/fonts',express.static(path.join(__dirname, 'fonts')));
 
 server.listen(app.get('port'), function () {
   console.log("Express server listening on port " + app.get('port'));
@@ -22,7 +24,19 @@ server.listen(app.get('port'), function () {
 //-----Routing------
 //==================
 app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/awal.html');
+});
+
+app.get('/game', function (req, res) {
   res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/start', function (req, res) {
+  res.sendFile(__dirname + '/awal.html');
+});
+
+app.get('/instruksi', function (req, res) {
+  res.sendFile(__dirname + '/instruksi.html');
 });
 
 //=================

@@ -1,5 +1,5 @@
 # final-project-jammakansiang
-final-project-jammakansiang created by GitHub Classroom
+final-project-jammakansiang created by GitHub Classroom for Graphical Computer's Final Project
 
 * 05111740000019 Paramastri Ardiningrum
 * 05111740000027 Safhira Maharani
