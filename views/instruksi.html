@@ -12,32 +12,56 @@
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-size: cover; */
-      background: linear-gradient(90deg, rgba(117,188,220,1) 0%, rgba(214,172,163,1) 50%, rgba(192,141,255,1) 100%);}
+      margin :0;
+      padding:0;
+      }
 
-    .img-container {
+    #semua{
+      position: absolute;
       text-align: center;
-      display: block;
+      padding-top: 80px;
+      width:100%;
+    }
+    .img-container {
       margin-top: 150px;
+      position: absolute;
+      width:100%;
+      display: block;
     }
 
     .img-container-2 {
-      text-align: center;
-      display: block;
       margin-top: 40px;
+      width:100%;
+      display: block;
+      
     }
+    #particles-js{
+    height:100vh;
+    background: rgb(117,188,220);
+    background: linear-gradient(90deg, rgba(117,188,220,1) 0%, rgba(214,172,163,1) 50%, rgba(192,141,255,1) 100%);
+  }
+
   </style>
 </head>
 
 <body>
-	<span class="img-container-2"> 
-      <img style="width: 20em;" src="../img/instruksi.png" alt="">
-    </span>
+  <div id="particles-js">
+    <div id="semua">
+      <span class="img-container-2"> 
+        <img style="width: 20em;" src="../img/instruksi.png" alt="">
+      </span>
+  
+      <span class="img-container-2"> 
+        <a href="/start"><img style="width:300px;" src="../img/menu.png" alt=""></a>
+      </span>
+    </div>
+  </div>
 
-    <span class="img-container-2"> 
-      <a href="/start"><img style="width:300px;" src="../img/menu.png" alt=""></a>
-    </span>
+  
+	 <!-- source particle nya -->
+   <script type="text/javascript" src="../particle/particles.js"></script>
+   <script type="text/javascript" src="../particle/app.js"></script>
 
-    </span>
     <audio autoplay> 
       <source src= "sound/awal.mp3" type="audio/mpeg ">  
   </audio> 
