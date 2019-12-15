@@ -1,4 +1,9 @@
 const THREE = require('three');
+const Physijs = require('physijs-webpack/browserify');
+
+// 'use strict';
+// Physijs.scripts.worker = '/js/physijs_worker.js';
+// Physijs.scripts.ammo = '/js/ammo.js';
 
 class Brick {
     static speed = 0.07;
@@ -26,12 +31,30 @@ class Brick {
         this.geometry = new THREE.BoxGeometry(this.params.size.x, this.params.size.y, this.params.size.z);
         this.material = new THREE.MeshLambertMaterial( { color: this.params.color } );
         
-        this.mesh = new THREE.Mesh( this.geometry, this.material );
-        this.mesh.name = this.mesh.uuid;
-        this.mesh.castShadow = this.params.castShadow;
-        this.mesh.receiveShadow = this.params.receiveShadow;
-        this.mesh.position.copy(this.params.position);
-        this.mesh.scale.copy(this.params.scale);
+        // Physics mesh
+        this.physijs_material = Physijs.createMaterial(
+            this.material,
+            .7,
+            .3
+        );
+        this.physijs_box = new Physijs.BoxMesh(
+            this.geometry,
+            this.physijs_material
+        );
+        this.physijs_box.collisions = 0;
+        this.physijs_box.name = this.physijs_box.uuid;
+        this.physijs_box.castShadow = this.params.castShadow;
+        this.physijs_box.receiveShadow = this.params.receiveShadow;
+        this.physijs_box.position.copy(this.params.position);
+        this.physijs_box.scale.copy(this.params.scale);
+        console.log(this.physijs_box);
+
+        // this.mesh = new THREE.Mesh( this.geometry, this.material );
+        // this.mesh.name = this.mesh.uuid;
+        // this.mesh.castShadow = this.params.castShadow;
+        // this.mesh.receiveShadow = this.params.receiveShadow;
+        // this.mesh.position.copy(this.params.position);
+        // this.mesh.scale.copy(this.params.scale);
     }
 
     static increaseSpeed() {
@@ -46,15 +69,18 @@ class Brick {
     // Karena scene me-render mesh,
     // agar lebih mudah memanggilnya dibuat fungsi saja
     get build() {
-        return this.mesh;
+        // return this.mesh;
+        return this.physijs_box;
     }
 
     get name() {
-        return this.mesh.name;
+        // return this.mesh.name;
+        return this.physijs_box.name;
     }
 
     get position() {
-        return this.mesh.position;
+        // return this.mesh.position;
+        return this.physijs_box.position;
     }
 
     /**
@@ -65,7 +91,8 @@ class Brick {
     }
 
     get scale() {
-        return this.mesh.scale;
+        // return this.mesh.scale;
+        return this.physijs_box.scale;
     }
 
     /**
@@ -76,7 +103,8 @@ class Brick {
     }
 
     down() {
-        this.mesh.position.y -= 1;
+        // this.mesh.position.y -= 1;
+        this.physijs_box.position.y -= 1;
     }
 
     /**
@@ -131,7 +159,8 @@ class Brick {
                 else if(this.position.x <= -batas)
                     this.position.x = -batas;
                 
-                this.position.x += this.speed;
+                // this.position.x += this.speed;
+                this.physijs_box.position.x += this.speed;
                 break;
             // Jika bergerak di-sumbu 'z'
             case 'z':
@@ -143,7 +172,8 @@ class Brick {
                 else if(this.position.z <= -batas)
                     this.position.z = -batas;
                 
-                this.mesh.position.z += this.speed;
+                // this.mesh.position.z += this.speed;
+                this.physijs_box.position.z += this.speed;
                 break;
             default:
                 break;
