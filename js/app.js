@@ -40,18 +40,18 @@ function init() {
     gameoverDisplay.style.display = "none";
 
     // Membuat ground tempat pijakan balok
-    var ground_material = Physijs.createMaterial(
-        new THREE.MeshLambertMaterial({color: 0xffffff}),
-        1.,
-        0,1
-    );
-    var ground = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(5, 1, 5),
-        ground_material,
-        0
-    );
-    ground.position.set(0,-13.5,0);
-    scene.add(ground);
+    // var ground_material = Physijs.createMaterial(
+    //     new THREE.MeshLambertMaterial({color: 0xffffff}),
+    //     1.,
+    //     0,1
+    // );
+    // var ground = new Physijs.BoxMesh(
+    //     new THREE.BoxGeometry(5, 1, 5),
+    //     ground_material,
+    //     0
+    // );
+    // ground.position.set(0,-13.5,0);
+    // scene.add(ground);
 
     // Membuat tumpukan awal hingga
     // bagian bawah tertutupi
