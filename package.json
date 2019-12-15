@@ -2,7 +2,7 @@
   "name": "final-project-jammakansiang",
   "version": "1.0.0",
   "description": "Final Project Grafika Komputer-B",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "browserifyinc --cachefile build/browserify-cache.json js/app.js -o build/bundle.js --debug -v",

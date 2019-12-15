@@ -2,7 +2,7 @@ const THREE = require('three');
 const Scene = require('./scene');
 const Brick = require('./brick');
 const Queue = require('./queue');
-// const socket = require('socket.io-client')(window.location.host);
+const socket = require('socket.io-client')(window.location.host);
 
 //==================
 //--Define command--
@@ -60,6 +60,28 @@ function init() {
 init();
 
 //=======================
+//-----Socket client-----
+//=======================
+const roomName = 'nganu';
+socket.emit('join', roomName);
+//-----------------------
+socket.on('keyboardEvent', function(data) {
+    console.log(data);
+});
+
+socket.on('deviceOrientation', function(data) {
+    console.log(data);
+});
+
+// socket.on('sync', function(data) {
+//     // console.log(data);
+//     for(let i = 0;i < bricks.size(); i++) {
+//         bricks.items[i].position = data.position[i];
+//         bricks.items[i].scale = data.scale[i];
+//     }
+// });
+
+//=======================
 //--Algoritma permainan--
 //=======================
 function animate() {
@@ -67,12 +89,24 @@ function animate() {
     loop();
 }
 
+//-----------------------
 function loop() {
     brick = bricks.back();
     switch (command) {
         // Balok melakukan update
         case PLAY:
             brick.move();
+
+            let message = {
+                position: new Array(),
+                scale: new Array()
+            }
+
+            for(let i = 0;i < bricks.size(); i++) {
+                message.position.push(bricks.items[i].position);
+                message.scale.push(bricks.items[i].scale);
+            }
+            // socket.emit('sync', message);
             break;
 
         case PAUSE:
@@ -104,8 +138,8 @@ function loop() {
                     direction = 'z';
                     startPos = -startPos;
                 }
-                // Jika balok berjalan di-arah x,
-                // mengatur direction menjadi 'x'
+                // Jika balok berjalan di-arah z,
+                // mengatur direction menjadi 'z'
                 else if(direction == 'z') {
                     var topBrick = new Brick({
                         position: new THREE.Vector3(brick.position.x, 0, startPos),
@@ -190,6 +224,7 @@ function onKeyDown(event) {
         default:
             break;
     }
+    socket.emit('keyboardEvent', event.code);
 }
 
 /**
@@ -213,7 +248,13 @@ function handleOrientation(event) {
         beta: Math.round(event.beta),
         gamma: Math.round(event.gamma)
     }
-    // socket.emit('deviceOrientation', orientation);
+    socket.emit('deviceOrientation', orientation);
+}
+
+if(window.DeviceOrientationEvent){
+    
+}else {
+    alert('DeviceOrientationEvent is not supported');
 }
 
 window.addEventListener('touchstart', onTouchEvent);
