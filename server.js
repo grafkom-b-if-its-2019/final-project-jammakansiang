@@ -24,19 +24,23 @@ server.listen(app.get('port'), function () {
 //-----Routing------
 //==================
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/awal.html');
+  res.sendFile(__dirname + '/views' + '/awal.html');
 });
 
 app.get('/game', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/views' + '/index.html');
 });
 
 app.get('/start', function (req, res) {
-  res.sendFile(__dirname + '/awal.html');
+  res.sendFile(__dirname + '/views' + '/awal.html');
 });
 
 app.get('/instruksi', function (req, res) {
-  res.sendFile(__dirname + '/instruksi.html');
+  res.sendFile(__dirname + '/views' + '/instruksi.html');
+});
+
+app.get('/master', function(req, res) {
+  res.sendFile(__dirname + '/views' + '/master.html');
 });
 
 //=================

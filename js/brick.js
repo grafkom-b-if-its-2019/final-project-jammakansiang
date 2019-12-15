@@ -72,6 +72,17 @@ class Brick {
         return this.physijs_box;
     }
 
+    get color() {
+        return this.material.color.getHSL();
+    }
+
+    /**
+     * @param {THREE.Color} newColor
+     */
+    set color(newColor) {
+        this.material.color.set(newColor);
+    }
+
     get name() {
         // return this.mesh.name;
         return this.physijs_box.name;

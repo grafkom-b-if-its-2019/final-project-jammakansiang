@@ -24,6 +24,7 @@ let position = new THREE.Vector3();
 let command = PLAY, startPos = 6.5, direction = 'x';
 let hue = 0;
 let scoreValue = 0;
+let previousScoreValue = 0;
 var scoreDisplay = document.getElementById("score");
 var gameoverDisplay = document.getElementById("game-over");
 
@@ -74,10 +75,16 @@ socket.on('deviceOrientation', function(data) {
 });
 
 socket.on('sync', function(data) {
-    // console.log(data);
-    for(let i = 0;i < bricks.size(); i++) {
-        bricks.items[i].position = data.position[i];
-        bricks.items[i].scale = data.scale[i];
+    for(let i = 0;i < data.property.length; i++) {
+        bricks.items[i].position = data.property[i].position;
+        bricks.items[i].scale = data.property[i].scale;
+        bricks.items[i].color = data.property[i].color;
+    }
+
+    if(data.score != previousScoreValue) {
+        scoreValue = data.score;
+        scoreDisplay.innerHTML = scoreValue;
+        previousScoreValue = scoreValue;
     }
 });
 
@@ -91,22 +98,9 @@ function animate() {
 
 //-----------------------
 function loop() {
-    brick = bricks.back();
     switch (command) {
         // Balok melakukan update
         case PLAY:
-            brick.move();
-
-            let message = {
-                position: new Array(),
-                scale: new Array()
-            }
-
-            for(let i = 0;i < bricks.size(); i++) {
-                message.position.push(bricks.items[i].position);
-                message.scale.push(bricks.items[i].scale);
-            }
-            // socket.emit('sync', message);
             break;
 
         case PAUSE:
@@ -115,83 +109,11 @@ function loop() {
         // Balok berhenti, memotong, dan stop
         // sesuai kondisi
         case SPACE:
-            prevBrick = bricks.get(bricks.size() - 2);
-    
-            // Jika balok masih bisa memotong, maka loop lanjut
-            if(brick.cut(prevBrick)) {
-                bricks.set(brick);
-    
-                // Untuk setiap stepnya, balok yang lama turun 1 kotak
-                for(let i = 0;i < bricks.size(); i++)
-                    bricks.items[i].down();
-
-                // Jika balok berjalan di-arah x,
-                // mengatur direction menjadi 'x'
-                if(direction == 'x') {
-                    var topBrick = new Brick({
-                        position: new THREE.Vector3(-startPos, 0, brick.position.z),
-                        scale: new THREE.Vector3(brick.scale.x, brick.scale.y, brick.scale.z),
-                        color: "hsl(" + hue +", 100%, 50%)",
-                        direction: direction
-                    });
-                    // Update agar variasi
-                    direction = 'z';
-                    startPos = -startPos;
-                }
-                // Jika balok berjalan di-arah z,
-                // mengatur direction menjadi 'z'
-                else if(direction == 'z') {
-                    var topBrick = new Brick({
-                        position: new THREE.Vector3(brick.position.x, 0, startPos),
-                        scale: new THREE.Vector3(brick.scale.x, brick.scale.y, brick.scale.z),
-                        color: "hsl(" + hue +", 100%, 50%)",
-                        direction: direction
-                    });
-                    // Update agar variasi
-                    direction = 'x';
-                }
-        
-                // Menambahkan balok baru
-                // Membuang balok lama
-                scene.add(topBrick.build);
-                scene.remove(bricks.front().name);
-                bricks.pop();
-                bricks.push(topBrick);
-                
-                // Mengatur parameter warna agar dinamis,
-                // berdasarkan tingkat nilai Hue-nya.
-                hue = (hue + 5) % 360;
-
-                // Update score
-                scoreValue++;
-                scoreDisplay.innerHTML = scoreValue;
-
-                // mengembalikan state menjadi play
-                command = PLAY;
-            }
-            // Jika balok tidak bisa memotong (game over)
-            else {
-                command = GAMEOVER;
-            }
             break;
         case GAMEOVER:
-            // Drop semua block
-            for(let i = 0;i < bricks.size(); i++)
-                scene.remove(bricks.items[i].name);
-            bricks.clear();
-
-            // Enable view gameover
-            gameoverDisplay.style.display = "block";
             break;
         case PLAYAGAIN:
-            // re-inisialisasi semua block
-            init();
-
-            // reset score
-            scoreValue = 0;
-            scoreDisplay.innerHTML = scoreValue;
-
-            command = PLAY;
+            break;
         default:
             break;
     }
@@ -199,64 +121,3 @@ function loop() {
     scene.render();
 }
 animate();
-
-//===================
-//---Event Handler---
-//===================
-/**
- * 
- * @param {KeyboardEvent} event 
- */
-function onKeyDown(event) {
-    switch (event.code) {
-        case "Space":
-            if(command == PLAY)
-                command = SPACE;
-            break;
-        case "KeyP":
-            if(command == PLAY)
-                command = PAUSE;
-            else if(command == PAUSE)
-                command = PLAY;
-        case "Enter":
-            if(command == GAMEOVER)
-                command = PLAYAGAIN;
-        default:
-            break;
-    }
-    socket.emit('keyboardEvent', event.code);
-}
-
-/**
- * 
- * @param {TouchEvent} event 
- */
-function onTouchEvent(event) {
-    if(command == PLAY)
-        command = SPACE;
-    else if(command == GAMEOVER)
-        command = PLAYAGAIN;
-}
-
-/**
- * 
- * @param {DeviceOrientationEvent} event 
- */
-function handleOrientation(event) {
-    var orientation = {
-        alpha: Math.round(event.alpha),
-        beta: Math.round(event.beta),
-        gamma: Math.round(event.gamma)
-    }
-    socket.emit('deviceOrientation', orientation);
-}
-
-if(window.DeviceOrientationEvent){
-    
-}else {
-    alert('DeviceOrientationEvent is not supported');
-}
-
-window.addEventListener('touchstart', onTouchEvent);
-window.addEventListener('keydown', onKeyDown);
-window.addEventListener('devicemotion', handleOrientation);

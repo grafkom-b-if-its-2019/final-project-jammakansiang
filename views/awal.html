@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" type="image/png" href="../img/favicon.png" />
+  <title>Ditumpuk Game</title>
+  <style>
+    body {
+      /* background-image: url("../img/bg.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center; */
+
+      background: rgb(131,58,180);
+      background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+    }
+
+    .img-container {
+      text-align: center;
+      display: block;
+      margin-top: 150px;
+    }
+
+    .img-container-2 {
+      text-align: center;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+	<span class="img-container"> 
+    <img style="width: 50%;" src="../img/judul.png" alt="">
+  </span>
+
+  <span class="img-container-2"> 
+    <a href="/game"><img style="width:300px;" src="../img/mulaibaru.png" alt=""></a>
+  </span>
+
+  <span class="img-container-2"> 
+    <a href="/instruksi"><img style="width:300px;" src="../img/caramain.png" alt=""></a>
+  </span>
+
+  <audio autoplay> 
+    <source src= "../sound/awal.mp3" type="audio/mpeg ">  
+  </audio> 
+
+  <script>
+    window.onload = function() {
+      document.getElementById("my_audio").play();
+    }
+  </script>
+
+</body>
+</html>
