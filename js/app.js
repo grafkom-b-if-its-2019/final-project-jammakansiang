@@ -1,7 +1,6 @@
 const THREE = require('three');
 const Scene = require('./scene');
 const Brick = require('./brick');
-// const FallingBrick = require('./fallingbrick');
 const Queue = require('./queue');
 const socket = require('socket.io-client')(window.location.host);
 const Physijs = require('physijs-webpack/browserify');
@@ -21,8 +20,6 @@ const PLAYAGAIN = 4;
 var scene = new Scene();
 let bricks = new Queue();
 let brick = new Brick();
-// let fallingbricks = new Queue;
-// let fallingbrick = new FallingBrick();
 let scale = new THREE.Vector3();
 let position = new THREE.Vector3();
 let command = PLAY, startPos = 6.5, direction = 'x';
@@ -41,6 +38,20 @@ function init() {
 
     // Disable view gameover
     gameoverDisplay.style.display = "none";
+
+    // Membuat ground tempat pijakan balok
+    var ground_material = Physijs.createMaterial(
+        new THREE.MeshLambertMaterial({color: 0xffffff}),
+        1.,
+        0,1
+    );
+    var ground = new Physijs.BoxMesh(
+        new THREE.BoxGeometry(5, 1, 5),
+        ground_material,
+        0
+    );
+    ground.position.set(0,-13.5,0);
+    scene.add(ground);
 
     // Membuat tumpukan awal hingga
     // bagian bawah tertutupi
