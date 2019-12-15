@@ -42,18 +42,25 @@ app.get('/instruksi', function (req, res) {
 //=================
 //-----Socket------
 //=================
-// io.on('connection', function(socket) {
-//   socket.on('join', function(room) {
-//     socket.join(room);
-//     socket.on('update', function(data) {
-//       console.log(data);
-//       // socket.broadcast.to(room).emit('update', data);
-//       socket.to(room).emit('update', data);
-//       // console.log(data);
-//     });
-//   });
+io.on('connection', function(socket) {
+  socket.on('join', function(room) {
+    socket.join(room);
 
-//   socket.on('disconnect', function() {
-//     console.log('A user disconnected');
-//   });
-// });
+    socket.on('keyboardEvent', function(data) {
+      console.log(data);
+      io.sockets.in(room).emit('keyboardEvent', data);
+    });
+
+    socket.on('deviceOrientation', function(data) {
+      io.sockets.in(room).emit('deviceOrientation', data);
+    })
+
+    socket.on('sync', function(data) {
+      io.sockets.in(room).emit('sync', data);
+    });
+  });
+
+  socket.on('disconnect', function() {
+    console.log('A user disconnected');
+  });
+});
