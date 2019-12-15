@@ -1,8 +1,10 @@
 const THREE = require('three');
 const Scene = require('./scene');
 const Brick = require('./brick');
+// const FallingBrick = require('./fallingbrick');
 const Queue = require('./queue');
 const socket = require('socket.io-client')(window.location.host);
+const Physijs = require('physijs-webpack/browserify');
 
 //==================
 //--Define command--
@@ -19,6 +21,8 @@ const PLAYAGAIN = 4;
 var scene = new Scene();
 let bricks = new Queue();
 let brick = new Brick();
+// let fallingbricks = new Queue;
+// let fallingbrick = new FallingBrick();
 let scale = new THREE.Vector3();
 let position = new THREE.Vector3();
 let command = PLAY, startPos = 6.5, direction = 'x';
@@ -88,6 +92,7 @@ socket.on('deviceOrientation', function(data) {
 //--Algoritma permainan--
 //=======================
 function animate() {
+    scene.simulate();
     requestAnimationFrame(() => {animate()});
     loop();
 }
@@ -115,14 +120,19 @@ function loop() {
 
         case PAUSE:
             break;
-
         // Balok berhenti, memotong, dan stop
         // sesuai kondisi
+
         case SPACE:
             prevBrick = bricks.get(bricks.size() - 2);
     
             // Jika balok masih bisa memotong, maka loop lanjut
             if(brick.cut(prevBrick)) {
+                // Balok baru berupa potongan akan dapat efek Physijs
+                // var fallingbrick = new FallingBrick(prevBrick.params);
+                // fallingbricks.push(fallingbrick);
+                // scene.add(fallingbrick.build);
+
                 bricks.set(brick);
     
                 // Untuk setiap stepnya, balok yang lama turun 1 kotak
@@ -175,6 +185,12 @@ function loop() {
             }
             // Jika balok tidak bisa memotong (game over)
             else {
+                // Balok akan dapat efek Physijs
+                // var fallingbrick = new FallingBrick(prevBrick.params);
+                // fallingbricks.push(fallingbrick);
+                // scene.remove(prevBrick.name);
+                // scene.add(fallingbrick.build);
+
                 command = GAMEOVER;
                 var gameover = new Audio('../sound/gameover.mp3');
                 gameover.play();
@@ -185,6 +201,11 @@ function loop() {
             for(let i = 0;i < bricks.size(); i++)
                 scene.remove(bricks.items[i].name);
             bricks.clear();
+
+            // // Drop semua falling block
+            // for(let i = 0;i < fallingbricks.size(); i++)
+            //     scene.remove(fallingbricks.items[i].name);
+            // fallingbricks.clear();
 
             // Enable view gameover
             gameoverDisplay.style.display = "block";

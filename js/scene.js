@@ -1,5 +1,6 @@
 const THREE = require('three');
 const OrbitControls = require('three-orbitcontrols');
+const Physijs = require('physijs-webpack/browserify');
 
 class Scene {
     constructor(param = {}) {
@@ -22,7 +23,15 @@ class Scene {
         //===============
         //-----Scene-----
         //===============
-        this.scene = new THREE.Scene();
+        // this.scene = new THREE.Scene();
+
+        // Physijs scene
+        this.scene = new Physijs.Scene();
+        this.scene.setGravity(new THREE.Vector3(0, -45, 0));
+        addEventListener(
+            'update',
+            function(){scene.simulate();}
+        );
         
         //==================
         //-----Renderer-----
@@ -96,6 +105,10 @@ class Scene {
 
     render() {
         this.renderer.render(this.scene, this.camera);
+    }
+
+    simulate() {
+        this.scene.simulate();
     }
 
     onWindowResize() {

@@ -1,7 +1,7 @@
 const THREE = require('three');
 const Physijs = require('physijs-webpack/browserify');
 
-class Brick {
+class FallingBrick {
     static speed = 0.07;
 
     constructor(param = {}) {
@@ -22,10 +22,7 @@ class Brick {
         // ke default parameter agar nilai parameter
         // di dalam class berubah
         this.params = Object.assign(defaultParam, param);
-        this.speed = Brick.speed;
-
-        // Inisiasi sementara passing u/ remained params ke FallingBrick
-        this.prevParams = Object.assign(defaultParam, param);
+        this.speed = FallingBrick.speed;
 
         this.geometry = new THREE.BoxGeometry(this.params.size.x, this.params.size.y, this.params.size.z);
         this.material = new THREE.MeshLambertMaterial( { color: this.params.color } );
@@ -57,12 +54,12 @@ class Brick {
     }
 
     static increaseSpeed() {
-        Brick.speed += 0.001;
-        this.speed = Brick.speed;
+        FallingBrick.speed += 0.001;
+        this.speed = FallingBrick.speed;
     }
 
     static resetSpeed() {
-        Brick.speed = 0.07;
+        FallingBrick.speed = 0.07;
     }
 
     // Karena scene me-render mesh,
@@ -126,27 +123,7 @@ class Brick {
         // dari potongannya, maka error / gameover (return false)
         if(curScale.x < Math.abs(diffX) 
         || curScale.z < Math.abs(diffZ) ) {
-            // this.prevParams = Object.assign(
-            //     this.prevParams,
-            //     {
-            //         size: prevBrick.scale,
-            //         position: new THREE.Vector3(
-            //             diffX/2,
-            //             1, 
-            //             diffZ/2
-            //         ),
-            //         scale: new THREE.Vector3(
-            //             Math.abs(diffX), 
-            //             1, 
-            //             Math.abs(diffZ)
-            //         ),
-            //         castShadow: true,
-            //         receiveShadow: true,
-            //         color: prevBrick.color,
-            //         direction: prevBrick.direction,
-            //     }
-            // );
-            Brick.resetSpeed();
+            FallingBrick.resetSpeed();
             return false;
         }
             
@@ -155,7 +132,7 @@ class Brick {
         curScale.z -= Math.abs(diffZ);
         curPosition.z -= (diffZ/2);
 
-        Brick.increaseSpeed();
+        FallingBrick.increaseSpeed();
         this.scale.copy(curScale);
         return true;
     }
@@ -178,7 +155,7 @@ class Brick {
                 else if(this.position.x <= -batas)
                     this.position.x = -batas;
                 
-                // this.mesh.position.x += this.speed;
+                // this.position.x += this.speed;
                 this.physijs_box.position.x += this.speed;
                 break;
             // Jika bergerak di-sumbu 'z'
@@ -201,4 +178,4 @@ class Brick {
 
 }
 
-module.exports = Brick;
+module.exports = FallingBrick;
