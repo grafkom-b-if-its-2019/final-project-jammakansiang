@@ -2,7 +2,7 @@ const THREE = require('three');
 const Scene = require('./scene');
 const Brick = require('./brick');
 const Queue = require('./queue');
-const socket = require('socket.io-client')(window.location.host);
+// const socket = require('socket.io-client')(window.location.host);
 
 //==================
 //--Define command--
@@ -65,16 +65,16 @@ init();
 //=======================
 //-----Socket client-----
 //=======================
-const roomName = 'nganu';
-socket.emit('join', roomName);
-//-----------------------
-socket.on('keyboardEvent', function(data) {
-    console.log(data);
-});
+// const roomName = 'nganu';
+// socket.emit('join', roomName);
+// //-----------------------
+// socket.on('keyboardEvent', function(data) {
+//     console.log(data);
+// });
 
-socket.on('deviceOrientation', function(data) {
-    console.log(data);
-});
+// socket.on('deviceOrientation', function(data) {
+//     console.log(data);
+// });
 
 // socket.on('sync', function(data) {
 //     // console.log(data);
@@ -233,7 +233,7 @@ function onKeyDown(event) {
         default:
             break;
     }
-    socket.emit('keyboardEvent', event.code);
+    // socket.emit('keyboardEvent', event.code);
 }
 
 /**
@@ -262,7 +262,7 @@ function handleOrientation(event) {
         beta: Math.round(event.beta),
         gamma: Math.round(event.gamma)
     }
-    socket.emit('deviceOrientation', orientation);
+    // socket.emit('deviceOrientation', orientation);
 }
 
 if(window.DeviceOrientationEvent){
