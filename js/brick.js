@@ -8,6 +8,7 @@ class Brick {
         //===============
         //---Parameter---
         //===============
+        var perfect = document.getElementById("perfect");
         var defaultParam = {
             size: new THREE.Vector3(1, 1, 1),
             position: new THREE.Vector3(0, 0, 0),
@@ -137,6 +138,10 @@ class Brick {
         console.log("x : " + diffX, curScale.x);
         console.log("Z : " + diffZ, curScale.z);
 
+        if(diffX==0 && diffZ==0){
+            perfect.style.opacity = 1.0
+        }
+
         // Jika ukuran saat ini lebih kecil
         // dari potongannya, maka error / gameover (return false)
         if(curScale.x < Math.abs(diffX) 
@@ -180,6 +185,9 @@ class Brick {
      * pada sumbu cartesian 'x' dan 'z'
      */
     move() {
+        if(perfect.style.opacity>0){
+            perfect.style.opacity-=0.03;
+        }
         const batas = 6.5;
 
         console.log("x : " + this.position.x);
