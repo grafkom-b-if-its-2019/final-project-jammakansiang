@@ -129,8 +129,19 @@ class Brick {
     cut(prevBrick)
     {
         var prevPosition = prevBrick.position;
+        prevPosition.x = Number((prevPosition.x).toFixed(1));
+        prevPosition.y = Number((prevPosition.y).toFixed(1));
+        prevPosition.z = Number((prevPosition.z).toFixed(1));
+       
         var curScale = this.scale;
+        curScale.x = Number((curScale.x).toFixed(1));
+        curScale.y = Number((curScale.y).toFixed(1));
+        curScale.z = Number((curScale.z).toFixed(1));
+        
         var curPosition = this.position;
+        curPosition.x = Number((curPosition.x).toFixed(1));
+        curPosition.y = Number((curPosition.y).toFixed(1));
+        curPosition.z = Number((curPosition.z).toFixed(1));
         
         var diffX = curPosition.x - prevPosition.x;
         var diffZ = curPosition.z - prevPosition.z;
