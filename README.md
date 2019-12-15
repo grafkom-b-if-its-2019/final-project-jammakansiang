@@ -10,7 +10,10 @@ final-project-jammakansiang created by GitHub Classroom for Graphical Computer's
 ### Development
 Sebelum dibuka di browser, pastikan melakukan build bundle terlebih dahulu:
 ```bash
-npm install # Abaikan jika sudah install
+# Abaikan jika sudah install
+npm install
+# Ada penambahan module untuk efek jatuh, wajib update dulu
+npm update
 npm run build
 ```
 Untuk menjalankan program:

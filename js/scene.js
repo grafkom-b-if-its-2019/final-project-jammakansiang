@@ -13,7 +13,9 @@ class Scene {
                 far: 1000,
                 position: new THREE.Vector3(2, 2, 2),
                 lookAt: [0, 0, 0],    
-            }
+            },
+            numPlayer: 1,
+            maxPlayer: 1
         };
         this.params = Object.assign(defaultParam, param);
         
@@ -25,9 +27,12 @@ class Scene {
         //==================
         //-----Renderer-----
         //==================
-        const canvas = document.querySelector('#c');
+        var canvas = document.querySelector('#c');
+        canvas.style.position = 'absolute';
+        canvas.style.left = `${ (window.innerWidth / this.params.maxPlayer) * (this.params.numPlayer - 1)}px`;
+        
         this.renderer = new THREE.WebGLRenderer({canvas, alpha:true});
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(window.innerWidth / this.params.maxPlayer, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.shadowMap.enabled = true;
 
@@ -45,8 +50,8 @@ class Scene {
         this.camera.position.copy(cameraConfig.position);
         this.camera.lookAt(new THREE.Vector3().fromArray(cameraConfig.lookAt));
         
-        this.camera.left = window.innerWidth / - frustumSize;
-        this.camera.right = window.innerWidth / frustumSize;
+        this.camera.left = window.innerWidth / (- frustumSize * this.params.maxPlayer);
+        this.camera.right = window.innerWidth / (frustumSize * this.params.maxPlayer);
         this.camera.top = window.innerHeight / frustumSize;
         this.camera.bottom = window.innerHeight / - frustumSize;
         this.camera.updateProjectionMatrix();

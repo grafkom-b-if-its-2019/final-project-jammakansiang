@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="icon" type="image/png" href="../img/favicon.png" />
     <title>Ditumpuk Game</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
     <div id="score">0</div>
@@ -19,14 +19,16 @@
         </span>
     </div>
     <canvas id="c"></canvas>
-    <script src="build/bundle.js"></script>
+
+    <script type="text/javascript" src="build/bundle.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script> -->
 
     <audio id="my_audio" src="sound/ingame.mp3" loop="loop"></audio>
     <script>
-      window.onload = function() {
-          document.getElementById("my_audio").play();
+        window.onload = function() {
+        document.getElementById("my_audio").play();
       }
-  </script>
+    </script>
     
 </body>
 </html>

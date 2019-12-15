@@ -14,6 +14,7 @@ app.use('/css',express.static(path.join(__dirname, 'css')));
 app.use('/img',express.static(path.join(__dirname, 'img')));
 app.use('/js',express.static(path.join(__dirname, 'js')));
 app.use('/sound',express.static(path.join(__dirname, 'sound')));
+app.use('/fonts',express.static(path.join(__dirname, 'fonts')));
 
 server.listen(app.get('port'), function () {
   console.log("Express server listening on port " + app.get('port'));
@@ -23,19 +24,19 @@ server.listen(app.get('port'), function () {
 //-----Routing------
 //==================
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/awal.html');
+  res.sendFile(__dirname + '/views' + '/awal.html');
 });
 
 app.get('/game', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/views' + '/index.html');
 });
 
 app.get('/start', function (req, res) {
-  res.sendFile(__dirname + '/awal.html');
+  res.sendFile(__dirname + '/views' + '/awal.html');
 });
 
 app.get('/instruksi', function (req, res) {
-  res.sendFile(__dirname + '/instruksi.html');
+  res.sendFile(__dirname + '/views' + '/instruksi.html');
 });
 
 //=================
@@ -44,11 +45,18 @@ app.get('/instruksi', function (req, res) {
 // io.on('connection', function(socket) {
 //   socket.on('join', function(room) {
 //     socket.join(room);
-//     socket.on('update', function(data) {
+
+//     socket.on('keyboardEvent', function(data) {
 //       console.log(data);
-//       // socket.broadcast.to(room).emit('update', data);
-//       socket.to(room).emit('update', data);
-//       // console.log(data);
+//       io.sockets.in(room).emit('keyboardEvent', data);
+//     });
+
+//     socket.on('deviceOrientation', function(data) {
+//       io.sockets.in(room).emit('deviceOrientation', data);
+//     })
+
+//     socket.on('sync', function(data) {
+//       io.sockets.in(room).emit('sync', data);
 //     });
 //   });
 

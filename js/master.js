@@ -2,7 +2,7 @@ const THREE = require('three');
 const Scene = require('./scene');
 const Brick = require('./brick');
 const Queue = require('./queue');
-// const socket = require('socket.io-client')(window.location.host);
+const socket = require('socket.io-client')(window.location.host);
 
 //==================
 //--Define command--
@@ -26,9 +26,6 @@ let hue = 0;
 let scoreValue = 0;
 var scoreDisplay = document.getElementById("score");
 var gameoverDisplay = document.getElementById("game-over");
-var isPlay=0;
-var myAudio = new Audio('../sound/ingame.mp3');
-var geoo;
 
 function init() {
     // Mengatur parameter warna berdasarkan nilai hue-nya
@@ -65,24 +62,24 @@ init();
 //=======================
 //-----Socket client-----
 //=======================
-// const roomName = 'nganu';
-// socket.emit('join', roomName);
-// //-----------------------
-// socket.on('keyboardEvent', function(data) {
-//     console.log(data);
-// });
+const roomName = 'nganu';
+socket.emit('join', roomName);
+//-----------------------
+socket.on('keyboardEvent', function(data) {
+    console.log(data);
+});
 
-// socket.on('deviceOrientation', function(data) {
-//     console.log(data);
-// });
+socket.on('deviceOrientation', function(data) {
+    console.log(data);
+});
 
-// socket.on('sync', function(data) {
-//     // console.log(data);
-//     for(let i = 0;i < bricks.size(); i++) {
-//         bricks.items[i].position = data.position[i];
-//         bricks.items[i].scale = data.scale[i];
-//     }
-// });
+socket.on('sync', function(data) {
+    // console.log(data);
+    for(let i = 0;i < bricks.size(); i++) {
+        bricks.items[i].position = data.position[i];
+        bricks.items[i].scale = data.scale[i];
+    }
+});
 
 //=======================
 //--Algoritma permainan--
@@ -110,7 +107,6 @@ function loop() {
                 message.scale.push(bricks.items[i].scale);
             }
             // socket.emit('sync', message);
-            nambahlagu();
             break;
 
         case PAUSE:
@@ -176,8 +172,6 @@ function loop() {
             // Jika balok tidak bisa memotong (game over)
             else {
                 command = GAMEOVER;
-                var gameover = new Audio('../sound/gameover.mp3');
-                gameover.play();
             }
             break;
         case GAMEOVER:
@@ -198,7 +192,6 @@ function loop() {
             scoreDisplay.innerHTML = scoreValue;
 
             command = PLAY;
-           
         default:
             break;
     }
@@ -219,8 +212,6 @@ function onKeyDown(event) {
         case "Space":
             if(command == PLAY)
                 command = SPACE;
-                var spasi = new Audio('../sound/spasi.mp3');
-                spasi.play();
             break;
         case "KeyP":
             if(command == PLAY)
@@ -233,7 +224,7 @@ function onKeyDown(event) {
         default:
             break;
     }
-    // socket.emit('keyboardEvent', event.code);
+    socket.emit('keyboardEvent', event.code);
 }
 
 /**
@@ -242,14 +233,9 @@ function onKeyDown(event) {
  */
 function onTouchEvent(event) {
     if(command == PLAY)
-    {
         command = SPACE;
-    }
     else if(command == GAMEOVER)
-    {
         command = PLAYAGAIN;
-    }
-        
 }
 
 /**
@@ -262,7 +248,7 @@ function handleOrientation(event) {
         beta: Math.round(event.beta),
         gamma: Math.round(event.gamma)
     }
-    // socket.emit('deviceOrientation', orientation);
+    socket.emit('deviceOrientation', orientation);
 }
 
 if(window.DeviceOrientationEvent){
@@ -273,42 +259,4 @@ if(window.DeviceOrientationEvent){
 
 window.addEventListener('touchstart', onTouchEvent);
 window.addEventListener('keydown', onKeyDown);
-window.addEventListener('deviceorientation', handleOrientation);
-
-function nambahlagu(){
-    if(isPlay==0)
-    {
-        myAudio.play();
-    }
-    else if (isPlay==1)
-    {
-        myAudio.stop();
-        console.log("aaa");
-    }
-}
-
-//font
-function tulisan(){
-    var loader = new THREE.FontLoader();
-
-    loader.load( '../fonts/perfect.typeface.json', function ( font ) {
-    
-        var geometry = new THREE.TextGeometry( 'Perfect', {
-            font: font,
-            size: 80,
-            height: 5,
-            curveSegments: 12,
-            bevelEnabled: true,
-            bevelThickness: 10,
-            bevelSize: 8,
-            bevelOffset: 0,
-            bevelSegments: 5
-        } );
-    } );
-
-    geoo= createMesh(geometry);
-    geoo.position.x=100;
-    geoo.position.y=100;
-    scene.add(geoo);
-}
-
+window.addEventListener('devicemotion', handleOrientation);

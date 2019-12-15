@@ -1,8 +1,8 @@
 {
   "name": "final-project-jammakansiang",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Final Project Grafika Komputer-B",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "browserifyinc --cachefile build/browserify-cache.json js/app.js -o build/bundle.js --debug -v",
@@ -29,9 +29,13 @@
     "browserify-incremental": "^3.1.1",
     "express": "^4.17.1",
     "nodemon": "^2.0.1",
+    "physijs-webpack": "^0.1.4",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "three": "^0.110.0",
-    "three-orbitcontrols": "^2.110.1"
+    "three-orbitcontrols": "^2.110.3"
+  },
+  "devDependencies": {
+    "webworkify": "^1.5.0"
   }
 }
