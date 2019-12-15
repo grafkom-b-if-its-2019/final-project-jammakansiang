@@ -128,6 +128,8 @@ class Brick {
      */
     cut(prevBrick)
     {
+        console.log(this.color);
+        var mantap = false;
         var prevPosition = prevBrick.position;
         prevPosition.x = Number((prevPosition.x).toFixed(1));
         prevPosition.y = Number((prevPosition.y).toFixed(1));
@@ -146,11 +148,12 @@ class Brick {
         var diffX = curPosition.x - prevPosition.x;
         var diffZ = curPosition.z - prevPosition.z;
 
-        console.log("x : " + diffX, curScale.x);
-        console.log("Z : " + diffZ, curScale.z);
+        // console.log("x : " + diffX, curScale.x);
+        // console.log("Z : " + diffZ, curScale.z);
 
         if(diffX==0 && diffZ==0){
-            perfect.style.opacity = 1.0
+            perfect.style.opacity = 1.0;
+            mantap = true;
         }
 
         // Jika ukuran saat ini lebih kecil
@@ -178,7 +181,7 @@ class Brick {
             //     }
             // );
             Brick.resetSpeed();
-            return false;
+            return [false, prevPosition, curScale, curPosition, this.color, mantap];
         }
             
         curScale.x -= Math.abs(diffX);
@@ -188,7 +191,7 @@ class Brick {
 
         Brick.increaseSpeed();
         this.scale.copy(curScale);
-        return true;
+        return [true, prevPosition, curScale, curPosition, this.color, mantap];
     }
 
     /** 
@@ -201,8 +204,8 @@ class Brick {
         }
         const batas = 6.5;
 
-        console.log("x : " + this.position.x);
-        console.log("Z : " + this.position.y);
+        // console.log("x : " + this.position.x);
+        // console.log("Z : " + this.position.y);
 
         switch (this.params.direction) {
             // Jika bergerak di-sumbu 'x'

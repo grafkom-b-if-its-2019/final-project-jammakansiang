@@ -144,7 +144,8 @@ function loop() {
             prevBrick = bricks.get(bricks.size() - 2);
     
             // Jika balok masih bisa memotong, maka loop lanjut
-            if(brick.cut(prevBrick)) {
+            var cutted_brick = brick.cut(prevBrick);
+            if(cutted_brick[0]) {
                 // Balok baru berupa potongan akan dapat efek Physijs
                 // var fallingbrick = new FallingBrick(prevBrick.params);
                 // fallingbricks.push(fallingbrick);
@@ -195,6 +196,9 @@ function loop() {
 
                 // Update score
                 scoreValue++;
+                if(cutted_brick[5]==true){
+                    scoreValue++;
+                }
                 scoreDisplay.innerHTML = scoreValue;
 
                 // mengembalikan state menjadi play
@@ -325,7 +329,6 @@ function nambahlagu(){
     else if (isPlay==1)
     {
         myAudio.stop();
-        console.log("aaa");
     }
 }
 
