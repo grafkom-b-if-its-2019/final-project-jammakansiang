@@ -1,6 +1,7 @@
 const THREE = require('three');
 const Scene = require('./scene');
 const Brick = require('./brick');
+const FallingBrick = require('./fallingbrick');
 const Queue = require('./queue');
 const socket = require('socket.io-client')(window.location.host);
 const Physijs = require('physijs-webpack/browserify');
@@ -20,6 +21,8 @@ const PLAYAGAIN = 4;
 var scene = new Scene();
 let bricks = new Queue();
 let brick = new Brick();
+let fallingbricks = new Queue();
+let fallingbrick = new FallingBrick();
 let scale = new THREE.Vector3();
 let position = new THREE.Vector3();
 let command = PLAY, startPos = 6.5, direction = 'x';
@@ -109,6 +112,42 @@ function animate() {
     loop();
 }
 
+// distraksi hujan Box
+function spawnBox() {
+    var xrandom = 2, zrandom = -2;
+    let i;
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+    function getXRandom(xrandom){
+        while (xrandom >= -2 && xrandom <= 2) {
+            xrandom = getRandomArbitrary(-10,10);
+        }
+        return xrandom;
+    }
+    function getZRandom(zrandom){
+        while (zrandom >= -2 && zrandom <= 2) {
+            zrandom = getRandomArbitrary(-10,10);
+        }
+        return zrandom;
+    }
+    i = Math.round(getRandomArbitrary(1,5));
+    // Hujan paling atas
+    for (let e = 0; e < i; e++) {
+        xrandom = getXRandom(xrandom);
+        zrandom = getZRandom(zrandom);
+        console.log(i,zrandom,xrandom,"ok");
+        fallingbrick = new FallingBrick({
+            position: new THREE.Vector3(xrandom, 20, zrandom),
+            direction: 'z',
+            color: "hsl(" + hue +", 100%, 50%)"
+        });
+    
+        fallingbricks.push(fallingbrick);
+        scene.add(fallingbrick.build);   
+    }
+}
+
 //-----------------------
 function loop() {
     brick = bricks.back();
@@ -116,6 +155,11 @@ function loop() {
         // Balok melakukan update
         case PLAY:
             brick.move();
+
+            // hapus box distraksi jika melewati y <= 0
+            for(let i = 0;i < fallingbricks.size(); i++)
+                if(fallingbricks.items[i].params.position.y <= 0)
+                    scene.remove(fallingbricks.items[i].name);
 
             let message = {
                 score: scoreValue,
@@ -142,7 +186,9 @@ function loop() {
 
         case SPACE:
             prevBrick = bricks.get(bricks.size() - 2);
-    
+            // distraksi box
+            spawnBox();
+            
             // Jika balok masih bisa memotong, maka loop lanjut
             if(brick.cut(prevBrick)) {
                 // Balok baru berupa potongan akan dapat efek Physijs
@@ -220,9 +266,9 @@ function loop() {
             bricks.clear();
 
             // // Drop semua falling block
-            // for(let i = 0;i < fallingbricks.size(); i++)
-            //     scene.remove(fallingbricks.items[i].name);
-            // fallingbricks.clear();
+            for(let i = 0;i < fallingbricks.size(); i++)
+                scene.remove(fallingbricks.items[i].name);
+            fallingbricks.clear();
 
             // Enable view gameover
             gameoverDisplay.style.display = "block";

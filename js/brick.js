@@ -121,6 +121,15 @@ class Brick {
         this.physijs_box.position.y -= 1;
     }
 
+    // menghilangkan seluruh mass untuk dapat efek jatuh ketika mutlak kalah
+    disabledMass() {
+        Brick.physijs_box = new Physijs.BoxMesh(
+            this.geometry,
+            this.physijs_material
+        );
+        Brick.physijs_box.__dirtyPosition = false;
+    }
+
     /**
      * @param {Brick} prevBrick Balok sebagai perbandingan saat ini dengan sebelumnya
      * @returns {boolean} Kondisi apakah dia masih bisa memotong atau tidak
@@ -141,26 +150,7 @@ class Brick {
         // dari potongannya, maka error / gameover (return false)
         if(curScale.x < Math.abs(diffX) 
         || curScale.z < Math.abs(diffZ) ) {
-            // this.prevParams = Object.assign(
-            //     this.prevParams,
-            //     {
-            //         size: prevBrick.scale,
-            //         position: new THREE.Vector3(
-            //             diffX/2,
-            //             1, 
-            //             diffZ/2
-            //         ),
-            //         scale: new THREE.Vector3(
-            //             Math.abs(diffX), 
-            //             1, 
-            //             Math.abs(diffZ)
-            //         ),
-            //         castShadow: true,
-            //         receiveShadow: true,
-            //         color: prevBrick.color,
-            //         direction: prevBrick.direction,
-            //     }
-            // );
+            this.disabledMass();
             Brick.resetSpeed();
             return false;
         }

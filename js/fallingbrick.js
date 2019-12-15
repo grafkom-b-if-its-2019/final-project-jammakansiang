@@ -31,13 +31,15 @@ class FallingBrick {
         this.physijs_material = Physijs.createMaterial(
             this.material,
             .7,
-            .3
+            .7
         );
         this.physijs_box = new Physijs.BoxMesh(
             this.geometry,
             this.physijs_material
         );
         this.physijs_box.collisions = 0;
+        this.physijs_box.setAngularVelocity(new THREE.Vector3(0, 0, 0));
+        this.physijs_box.setLinearVelocity(new THREE.Vector3(0, 0, 0));
         this.physijs_box.name = this.physijs_box.uuid;
         this.physijs_box.castShadow = this.params.castShadow;
         this.physijs_box.receiveShadow = this.params.receiveShadow;
@@ -54,7 +56,7 @@ class FallingBrick {
     }
 
     static increaseSpeed() {
-        FallingBrick.speed += 0.001;
+        FallingBrick.speed += 0.1 * Math.random();
         this.speed = FallingBrick.speed;
     }
 
@@ -76,6 +78,7 @@ class FallingBrick {
 
     get position() {
         // return this.mesh.position;
+        this.physijs_box.__dirtyPosition = true;
         return this.physijs_box.position;
     }
 
@@ -100,6 +103,7 @@ class FallingBrick {
 
     down() {
         // this.mesh.position.y -= 1;
+        this.physijs_box.__dirtyPosition = true;
         this.physijs_box.position.y -= 1;
     }
 
@@ -107,74 +111,6 @@ class FallingBrick {
      * @param {Brick} prevBrick Balok sebagai perbandingan saat ini dengan sebelumnya
      * @returns {boolean} Kondisi apakah dia masih bisa memotong atau tidak
      */
-    cut(prevBrick)
-    {
-        var prevPosition = prevBrick.position;
-        var curScale = this.scale;
-        var curPosition = this.position;
-        
-        var diffX = curPosition.x - prevPosition.x;
-        var diffZ = curPosition.z - prevPosition.z;
-
-        console.log("x : " + diffX, curScale.x);
-        console.log("Z : " + diffZ, curScale.z);
-
-        // Jika ukuran saat ini lebih kecil
-        // dari potongannya, maka error / gameover (return false)
-        if(curScale.x < Math.abs(diffX) 
-        || curScale.z < Math.abs(diffZ) ) {
-            FallingBrick.resetSpeed();
-            return false;
-        }
-            
-        curScale.x -= Math.abs(diffX);
-        curPosition.x -= (diffX/2);
-        curScale.z -= Math.abs(diffZ);
-        curPosition.z -= (diffZ/2);
-
-        FallingBrick.increaseSpeed();
-        this.scale.copy(curScale);
-        return true;
-    }
-
-    /** 
-     * Melakukan move object sesuai arah
-     * pada sumbu cartesian 'x' dan 'z'
-     */
-    move() {
-        const batas = 6.5;
-
-        switch (this.params.direction) {
-            // Jika bergerak di-sumbu 'x'
-            case 'x':
-                if(this.position.x >= batas || this.position.x <= -batas)
-                    this.speed = -this.speed;
-                    
-                if(this.position.x >= batas)
-                    this.position.x = batas;
-                else if(this.position.x <= -batas)
-                    this.position.x = -batas;
-                
-                // this.position.x += this.speed;
-                this.physijs_box.position.x += this.speed;
-                break;
-            // Jika bergerak di-sumbu 'z'
-            case 'z':
-                if(this.position.z >= batas || this.position.z <= -batas)
-                    this.speed = -this.speed;
-                    
-                if(this.position.z >= batas)
-                    this.position.z = batas;
-                else if(this.position.z <= -batas)
-                    this.position.z = -batas;
-                
-                // this.mesh.position.z += this.speed;
-                this.physijs_box.position.z += this.speed;
-                break;
-            default:
-                break;
-        }
-    }
 
 }
 
