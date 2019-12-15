@@ -7,10 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile:app": "browserifyinc --cachefile build/browserify-cache.json js/app.js -o build/bundle.js --debug -v",
     "compile:master": "browserifyinc --cachefile build/browserify-cache-master.json js/master.js -o build/bundle-master.js --debug -v",
-    "build:app" : "browserify js/app.js -o build/bundle.js --debug -v",
+    "build:app": "browserify js/app.js -o build/bundle.js --debug -v",
     "build:master": "browserify js/master.js -o build/bundle-master.js --debug -v",
     "build": "npm --silent run build:app & npm --silent run build:master",
-    
     "dev": "nodemon --exec \"npm --silent start\" --ignore build",
     "start": "npm run compile:app & npm run compile:master & node server.js"
   },
@@ -33,9 +32,13 @@
     "browserify-incremental": "^3.1.1",
     "express": "^4.17.1",
     "nodemon": "^2.0.2",
+    "physijs-webpack": "^0.1.4",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "three": "^0.110.0",
     "three-orbitcontrols": "^2.110.3"
+  },
+  "devDependencies": {
+    "webworkify": "^1.5.0"
   }
 }
