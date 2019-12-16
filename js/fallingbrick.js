@@ -98,7 +98,7 @@ class FallingBrick {
      * @param {THREE.Vector3} newScale
      */
     set scale(newScale) {
-        this.scale.copy(newScale);
+        this.scale.set(newScale.x, netScale.y, newScale.z);
     }
 
     down() {

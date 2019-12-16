@@ -25,7 +25,7 @@ let fallingbricks = new Queue();
 let fallingbrick = new FallingBrick();
 let scale = new THREE.Vector3();
 let position = new THREE.Vector3();
-let command = PLAY, startPos = 6.5, direction = 'x';
+let command = PLAY, startPos = 6.5, direction = 'z';
 let hue = 0;
 let scoreValue = 0;
 var scoreDisplay = document.getElementById("score");
@@ -170,7 +170,7 @@ function loop() {
                 let object = {
                     position: bricks.items[i].position,
                     scale: bricks.items[i].scale,
-                    color: bricks.items[i].color
+                    hue: bricks.items[i].color.h
                 };
                 message.property.push(object);
             }
@@ -196,6 +196,26 @@ function loop() {
                 // var fallingbrick = new FallingBrick(prevBrick.params);
                 // fallingbricks.push(fallingbrick);
                 // scene.add(fallingbrick.build);
+                if(brick.params.direction == 'x') {
+                    var a_fallingbrick = new FallingBrick({
+                        position: new THREE.Vector3(cutted_brick[3].x + brick.scale.x, -1, cutted_brick[3].z),
+                        scale: new THREE.Vector3(cutted_brick[2].x, 1, brick.scale.z),
+                        direction: 'z',
+                        color: "hsl(" + hue +", 100%, 50%)"
+                    });    
+                    // fallingbricks.push(fallingbrick);
+                    scene.add(a_fallingbrick.build);
+                }
+                else if(brick.params.direction == 'z') {
+                    var a_fallingbrick = new FallingBrick({
+                        position: new THREE.Vector3(cutted_brick[3].x, -1, cutted_brick[3].z + brick.scale.z),
+                        scale: new THREE.Vector3(brick.scale.x, 1, cutted_brick[2].z),
+                        direction: 'z',
+                        color: "hsl(" + hue +", 100%, 50%)"
+                    });    
+                    // fallingbricks.push(fallingbrick);
+                    scene.add(a_fallingbrick.build);                       
+                }
 
                 bricks.set(brick);
     
@@ -339,7 +359,7 @@ function onTouchEvent(event) {
     }
     else if(command == GAMEOVER)
     {
-        command = PLAYAGAIN;
+        // command = PLAYAGAIN;
     }
         
 }
