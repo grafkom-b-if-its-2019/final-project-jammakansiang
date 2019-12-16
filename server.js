@@ -44,6 +44,10 @@ app.get('/master', function(req, res) {
   res.sendFile(__dirname + '/views' + '/master.html');
 });
 
+app.get('/player', function(req, res) {
+  res.sendFile(__dirname + '/views' + '/player.html');
+});
+
 //=================
 //-----Socket------
 //=================
