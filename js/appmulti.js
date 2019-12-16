@@ -3,7 +3,7 @@ const Scene = require('./scene');
 const Brick = require('./brick');
 const FallingBrick = require('./fallingbrick');
 const Queue = require('./queue');
-// const socket = require('socket.io-client')(window.location.host);
+const socket = require('socket.io-client')(window.location.host);
 const Physijs = require('physijs-webpack/browserify');
 
 //==================
@@ -27,14 +27,18 @@ let cutted_bricks = new Queue();
 let scale = new THREE.Vector3();
 let position = new THREE.Vector3();
 let command = PLAY, startPos = 6.5, direction = 'z';
-let hue = 0;
+let hue = 0; 
 let scoreValue = 0;
 var scoreDisplay = document.getElementById("score");
 var gameoverDisplay = document.getElementById("game-over");
+var waitingDisplay = document.getElementById("waiting");
+
 var playagainButton = document.getElementById("playagain");
 var isPlay=0;
 var myAudio = new Audio('../sound/ingame.mp3');
 var geoo;
+
+let readyToPlay = 0;
 
 function init() {
     // Mengatur parameter warna berdasarkan nilai hue-nya
@@ -85,16 +89,36 @@ init();
 //=======================
 //-----Socket client-----
 //=======================
-// const roomName = 'nganu';
-// socket.emit('join', roomName);
-//-----------------------
-// socket.on('keyboardEvent', function(data) {
-    // console.log(data);
-// });
+const roomName = 'nganu';
+socket.emit('join', roomName);
 
-// socket.on('deviceOrientation', function(data) {
+//-----------------------
+
+var idplayer = 0;
+
+socket.on('init', function(data) {
+    idplayer = data;
+    console.log(data);
+});
+
+socket.on('keyboardEvent', function(data) {
     // console.log(data);
-// });
+});
+
+socket.on('deviceOrientation', function(data) {
+    // console.log(data);
+});
+
+scoreDisplay.style.display = "none";
+
+socket.on('gameplay', function(data) {
+    // Jika singleplayer
+    if(data == 1) {
+        waitingDisplay.style.display = "none";
+        scoreDisplay.style.display = "block";
+        readyToPlay = 1;
+    }
+});
 
 // socket.on('sync', function(data) {
 //     // console.log(data);
@@ -108,9 +132,10 @@ init();
 //--Algoritma permainan--
 //=======================
 function animate() {
-    scene.simulate();
-    requestAnimationFrame(() => {animate()});
-    loop();
+        scene.simulate();
+        requestAnimationFrame(() => {animate()});
+        if(readyToPlay == 1)
+            loop();
 }
 
 // distraksi hujan Box
@@ -164,7 +189,8 @@ function loop() {
 
             let message = {
                 score: scoreValue,
-                property: []
+                property: [],
+                id: idplayer
             };
             
             for(let i = 0;i < bricks.size(); i++) {
@@ -176,7 +202,7 @@ function loop() {
                 message.property.push(object);
             }
 
-            // socket.emit('sync', message);
+            socket.emit('sync', message);
             nambahlagu();
             break;
 
@@ -386,7 +412,7 @@ function onKeyDown(event) {
  * @param {TouchEvent} event 
  */
 function onTouchEvent(event) {
-    if(command == PLAY)
+    if(command == PLAY && readyToPlay == 1)
     {
         command = SPACE;
     }
@@ -408,12 +434,6 @@ function handleOrientation(event) {
         gamma: Math.round(event.gamma)
     }
     // socket.emit('deviceOrientation', orientation);
-}
-
-if(window.DeviceOrientationEvent){
-    
-}else {
-    alert('DeviceOrientationEvent is not supported');
 }
 
 window.addEventListener('touchstart', onTouchEvent);

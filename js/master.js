@@ -16,8 +16,9 @@ const PLAYAGAIN = 4;
 //==================
 //---Inisialisasi---
 //==================
+var scenes = new Array(new Scene());
 var scene = new Scene();
-let bricks = new Queue();
+let bricks = new Array(new Queue());
 let brick = new Brick();
 let scale = new THREE.Vector3();
 let position = new THREE.Vector3();
@@ -29,35 +30,44 @@ var scoreDisplay = document.getElementById("score");
 var gameoverDisplay = document.getElementById("game-over");
 
 function init() {
-    // Mengatur parameter warna berdasarkan nilai hue-nya
-    hue = Math.floor(Math.random() * 360);
 
-    // Disable view gameover
-    gameoverDisplay.style.display = "none";
+    for(let i = 0;i < 4; i++) {
+        scene = new Scene({
+            numPlayer: i+1,
+            maxPlayer: 4
+        });
+        scenes.push(scene);
+        // Mengatur parameter warna berdasarkan nilai hue-nya
+        hue = Math.floor(Math.random() * 360);
+        
+        // Membuat tumpukan awal hingga
+        // bagian bawah tertutupi
+        for(let j = -14;j < 0; j++) {
+            brick = new Brick({
+                position: new THREE.Vector3(0, j, 0),
+                direction: 'z',
+                color: "hsl(" + hue +", 100%, 50%)"
+            });
 
-    // Membuat tumpukan awal hingga
-    // bagian bawah tertutupi
-    for(let i = -14;i < 0; i++) {
+            bricks[i].push(brick);
+            scenes[i].add(bricks[i].build);
+        }
+
+        // Tumpukan paling atas
         brick = new Brick({
-            position: new THREE.Vector3(0, i, 0),
+            position: new THREE.Vector3(0, 0, startPos),
             direction: 'z',
             color: "hsl(" + hue +", 100%, 50%)"
         });
 
-        bricks.push(brick);
-        scene.add(brick.build);
+        bricks[i].push(brick);
+        scenes[i].add(bricks[i].build);
     }
 
-    // Tumpukan paling atas
-    brick = new Brick({
-        position: new THREE.Vector3(0, 0, startPos),
-        direction: 'z',
-        color: "hsl(" + hue +", 100%, 50%)"
-    });
-
-    bricks.push(brick);
-    scene.add(brick.build);
+    // Disable view gameover
+    gameoverDisplay.style.display = "none";
 }
+
 init();
 
 //=======================
@@ -66,19 +76,12 @@ init();
 const roomName = 'nganu';
 socket.emit('join', roomName);
 //-----------------------
-socket.on('keyboardEvent', function(data) {
-    console.log(data);
-});
-
-socket.on('deviceOrientation', function(data) {
-    console.log(data);
-});
 
 socket.on('sync', function(data) {
     for(let i = 0;i < data.property.length; i++) {
-        bricks.items[i].position = data.property[i].position;
-        bricks.items[i].scale = data.property[i].scale;
-        bricks.items[i].color = data.property[i].hue;
+        bricks[data.id-1].items[i].position = data.property[i].position;
+        bricks[data.id-1].items[i].scale = data.property[i].scale;
+        bricks[data.id-1].items[i].color = data.property[i].hue;
     }
 
     if(data.score != previousScoreValue) {
@@ -118,6 +121,7 @@ function loop() {
             break;
     }
 
-    scene.render();
+    for(let i = 0;i < scenes.length; i++)
+        scenes[i].render();
 }
 animate();

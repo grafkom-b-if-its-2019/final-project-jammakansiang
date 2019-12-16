@@ -6,12 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile:app": "browserifyinc --cachefile build/browserify-cache.json js/app.js -o build/bundle.js --debug -v",
+    "compile:multi": "browserifyinc --cachefile build/browserify-cache-multi.json js/appmulti.js -o build/bundle-multi.js --debug -v",
     "compile:master": "browserifyinc --cachefile build/browserify-cache-master.json js/master.js -o build/bundle-master.js --debug -v",
     "build:app": "browserify js/app.js -o build/bundle.js --debug -v",
+    "build:multi":"browserify js/appmulti.js -o build/bundle-multi.js --debug -v",
     "build:master": "browserify js/master.js -o build/bundle-master.js --debug -v",
-    "build": "npm --silent run build:app & npm --silent run build:master",
+    "build": "npm --silent run build:app & npm --silent run build:multi & npm --silent run build:master",
     "dev": "nodemon --exec \"npm --silent start\" --ignore build",
-    "start": "npm run compile:app & npm run compile:master & node server.js"
+    "start": "npm run compile:app & npm run compile:master & npm run compile:multi & node server.js"
   },
   "repository": {
     "type": "git",

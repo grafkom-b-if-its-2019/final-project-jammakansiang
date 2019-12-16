@@ -21,6 +21,8 @@ server.listen(app.get('port'), function () {
   console.log("Express server listening on port " + app.get('port'));
 });
 
+var maxPlayer = 1;
+
 //==================
 //-----Routing------
 //==================
@@ -28,12 +30,16 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/views' + '/awal.html');
 });
 
-app.get('/game', function (req, res) {
-  res.sendFile(__dirname + '/views' + '/index.html');
+app.post('/', function(req, res) {
+
 });
 
-app.get('/game-multiplayer', function (req, res) {
-  res.sendFile(__dirname + '/views' + '/indexmultiplayer.html');
+app.get('/input', function (req, res) {
+  res.sendFile(__dirname + '/views' + '/input.html');
+});
+
+app.get('/game', function (req, res) {
+  res.sendFile(__dirname + '/views' + '/index.html');
 });
 
 app.get('/start', function (req, res) {
@@ -48,42 +54,38 @@ app.get('/master', function(req, res) {
   res.sendFile(__dirname + '/views' + '/master.html');
 });
 
-app.get('/player', function(req, res) {
-  res.sendFile(__dirname + '/views' + '/player.html');
-});
-
-app.get('/multiplayer', function(req, res) {
-  res.sendFile(__dirname + '/views' + '/form.html');
-});
-
-var players = [];
-
 //=================
 //-----Socket------
 //=================
+
+var players = [];
+
 io.on('connection', function(socket) {
   socket.on('join', function(room) {
     socket.join(room);
-
-    console.log(socket.id);
-
-    if(players.length == 0 && socket.conn.remoteAddress != "::1") players.push(socket.id);
-    for(let i = 0;i < players.length; i++) {
-      if(socket.id != players[i] && socket.conn.remoteAddress != "::1") {
-        players.push(socket.id);
+    for(let i = 0;i < players.size(); i++) {
+      if(socket.conn.remoteAddress != players[i]) {
+        players.push(socket.conn.remoteAddress);
         break;
       }
     }
 
-    io.sockets.connected[socket.id].emit('init', players.indexOf(socket.id) + 1);
-
-    if(players.length >= 2) {
-      io.sockets.in(room).emit('gameplay', true);
-
-      socket.on('sync', function(data) {
-        io.sockets.in(room).emit('sync', data);
-      });
+    if(players.length == maxPlayer) {
+      io.sockets.in(room).emit('ready', 1);
     }    
+
+    socket.on('keyboardEvent', function(data) {
+      console.log(data);
+      io.sockets.in(room).emit('keyboardEvent', data);
+    });
+
+    socket.on('deviceOrientation', function(data) {
+      io.sockets.in(room).emit('deviceOrientation', data);
+    })
+
+    socket.on('sync', function(data) {
+      io.sockets.in(room).emit('sync', data);
+    });
   });
 
   socket.on('disconnect', function() {

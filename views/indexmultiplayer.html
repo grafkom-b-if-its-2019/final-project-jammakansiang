@@ -10,18 +10,19 @@
 </head>
 <body>
     <div id="score">0</div>
+    <div id="waiting">Tunggu player yang lain dulu ya!</div>
     <div id="perfect">MANTAP MANTAP</div>
     <div id="game-over">
         <img style="width: 300px;" src="img/over.png" alt="">
-
+        <!-- <br>Tekan 'ENTER'<br> -->
         <span class="img-container-2">
-            <a href="javascript:void(0)" id="playagain"><img style="width:300px;" src="img/mainagain.png" alt=""></a>
+            <!-- <a href="javascript:void(0)" id="playagain"><img style="width:300px;" src="img/mainagain.png" alt=""></a> -->
             <a href="/start"><img style="width:300px;" src="img/menu.png" alt=""></a>
         </span>
     </div>
     <canvas id="c"></canvas>
 
-    <script type="text/javascript" src="../build/bundle.js"></script>
+    <script type="text/javascript" src="../build/bundle-multi.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script> -->
 
     <audio id="my_audio" src="sound/ingame.mp3" loop="loop"></audio>
