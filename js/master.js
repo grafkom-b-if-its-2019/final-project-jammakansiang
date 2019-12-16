@@ -78,7 +78,8 @@ socket.on('sync', function(data) {
     for(let i = 0;i < data.property.length; i++) {
         bricks.items[i].position = data.property[i].position;
         bricks.items[i].scale = data.property[i].scale;
-        bricks.items[i].color = data.property[i].color;
+        bricks.items[i].color = (data.property[i].hue, 1., .5);
+        console.log(data.property[i].hue);
     }
 
     if(data.score != previousScoreValue) {

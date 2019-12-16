@@ -75,8 +75,9 @@ class Brick {
     }
 
     get color() {
-    //     return this.material.color.getHSL();
-        return this.physijs_material.color.getHSL();
+        var HSLColor = new THREE.Color;
+        this.physijs_material.color.getHSL(HSLColor);
+        return HSLColor;
     }
 
     /**
@@ -137,30 +138,26 @@ class Brick {
      */
     cut(prevBrick)
     {
-        console.log(this.color);
         var mantap = false;
         var prevPosition = prevBrick.position;
         prevPosition.x = Number((prevPosition.x).toFixed(1));
-        prevPosition.y = Number((prevPosition.y).toFixed(1));
         prevPosition.z = Number((prevPosition.z).toFixed(1));
        
         var curScale = this.scale;
         curScale.x = Number((curScale.x).toFixed(1));
-        curScale.y = Number((curScale.y).toFixed(1));
         curScale.z = Number((curScale.z).toFixed(1));
         
         var curPosition = this.position;
         curPosition.x = Number((curPosition.x).toFixed(1));
-        curPosition.y = Number((curPosition.y).toFixed(1));
         curPosition.z = Number((curPosition.z).toFixed(1));
         
         var diffX = curPosition.x - prevPosition.x;
         var diffZ = curPosition.z - prevPosition.z;
 
-        // console.log("x : " + diffX, curScale.x);
-        // console.log("Z : " + diffZ, curScale.z);
+        console.log("x : " + diffX, curScale.x);
+        console.log("Z : " + diffZ, curScale.z);
 
-        if(diffX==0 && diffZ==0){
+        if(diffX == 0 && diffZ == 0){
             perfect.style.opacity = 1.0;
             mantap = true;
         }
@@ -181,7 +178,11 @@ class Brick {
 
         Brick.increaseSpeed();
         this.scale.copy(curScale);
-        return [true, prevPosition, curScale, curPosition, this.color, mantap];
+        var ukuran = new THREE.Vector3();
+        var scalebaru = new THREE.Vector3();
+        ukuran.set(diffX, 1, diffZ);
+        console.log(ukuran);
+        return [true, prevPosition, ukuran, curPosition, this.color, mantap];
     }
 
     /** 
