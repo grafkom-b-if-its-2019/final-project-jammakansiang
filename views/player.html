@@ -8,15 +8,58 @@
     <title>Ditumpuk Game</title>
     <link rel="stylesheet" href="../css/style.css" />
 </head>
+<style>
+    body {
+      margin :0;
+      padding:0;
+    }
 
+    #semua{
+      position: absolute;
+      text-align: center;
+      padding-top: 5%;
+      width:100%;
+    }
+
+    .img-container-2 {
+      width:100%;
+      display: block;
+      
+    }
+    
+    #particles-js{
+    height:100vh;
+    background: rgb(117,188,220);
+    background: linear-gradient(90deg, rgba(117,188,220,1) 0%, rgba(214,172,163,1) 50%, rgba(192,141,255,1) 100%);
+  }
+</style>
 <body>
-    <div style="margin-top: 100px;">
-        <span class="img-container-2"> 
-            <a href="/game"><img style="width:300px;" src="img/single.png" alt=""></a>
-            <a href="/multiplayer"><img style="width:300px;" src="img/multiple.png" alt=""></a>
-        </span>
-        <span style="margin-top: 40px;;" class="img-container-2"> 
-            <a href="/start"><img style="width:300px;" src="../img/menu.png" alt=""></a>
-          </span>
+    <!-- menambah particle -->
+  <div id="particles-js">
+    <div id="semua">
+        <div style="margin-top: 100px;">
+            <span class="img-container-2"> 
+                <a href="/game"><img style="width:300px;" src="img/single.png" alt=""></a>
+                <a href="/multiplayer"><img style="width:300px;" src="img/multiple.png" alt=""></a>
+            </span>
+            <span style="margin-top: 40px;;" class="img-container-2"> 
+                <a href="/start"><img style="width:300px;" src="../img/menu.png" alt=""></a>
+              </span>
+        </div>
     </div>
+  </div>
+
+    <!-- source particle nya -->
+  <script type="text/javascript" src="../particle/particles.js"></script>
+  <script type="text/javascript" src="../particle/app.js"></script>
+
+  <!-- sound -->
+  <audio autoplay> 
+    <source src= "../sound/awal.mp3" type="audio/mpeg ">  
+  </audio> 
+  <script>
+    window.onload = function() {
+      document.getElementById("my_audio").play();
+    }
+  </script>
 </body>
