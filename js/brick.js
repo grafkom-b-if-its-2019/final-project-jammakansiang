@@ -84,7 +84,7 @@ class Brick {
      * @param {THREE.Color} newColor
      */
     set color(newColor) {
-        this.material.color.set(newColor);
+        this.material.color.setHSL(newColor, 1, 0.5);
     }
 
     get name() {

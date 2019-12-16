@@ -171,7 +171,7 @@ function loop() {
                 let object = {
                     position: bricks.items[i].position,
                     scale: bricks.items[i].scale,
-                    color: bricks.items[i].color
+                    hue: bricks.items[i].color.h
                 };
                 message.property.push(object);
             }
@@ -392,7 +392,7 @@ function onTouchEvent(event) {
     }
     else if(command == GAMEOVER)
     {
-        command = PLAYAGAIN;
+        // command = PLAYAGAIN;
     }
         
 }
