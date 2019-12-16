@@ -23,6 +23,7 @@ let bricks = new Queue();
 let brick = new Brick();
 let fallingbricks = new Queue();
 let fallingbrick = new FallingBrick();
+let cutted_bricks = new Queue();
 let scale = new THREE.Vector3();
 let position = new THREE.Vector3();
 let command = PLAY, startPos = 6.5, direction = 'z';
@@ -88,11 +89,11 @@ const roomName = 'nganu';
 socket.emit('join', roomName);
 //-----------------------
 socket.on('keyboardEvent', function(data) {
-    console.log(data);
+    // console.log(data);
 });
 
 socket.on('deviceOrientation', function(data) {
-    console.log(data);
+    // console.log(data);
 });
 
 // socket.on('sync', function(data) {
@@ -136,7 +137,7 @@ function spawnBox() {
     for (let e = 0; e < i; e++) {
         xrandom = getXRandom(xrandom);
         zrandom = getZRandom(zrandom);
-        console.log(i,zrandom,xrandom,"ok");
+        // console.log(i,zrandom,xrandom,"ok");
         fallingbrick = new FallingBrick({
             position: new THREE.Vector3(xrandom, 20, zrandom),
             direction: 'z',
@@ -185,6 +186,10 @@ function loop() {
         // sesuai kondisi
 
         case SPACE:
+            if(cutted_bricks.size>3){
+                scene.remove(cutted_bricks.front().name)
+                cutted_bricks.pop()
+            }
             prevBrick = bricks.get(bricks.size() - 2);
             // distraksi box
             spawnBox();
@@ -196,25 +201,53 @@ function loop() {
                 // var fallingbrick = new FallingBrick(prevBrick.params);
                 // fallingbricks.push(fallingbrick);
                 // scene.add(fallingbrick.build);
-                if(brick.params.direction == 'x') {
-                    var a_fallingbrick = new FallingBrick({
-                        position: new THREE.Vector3(cutted_brick[3].x + brick.scale.x, -1, cutted_brick[3].z),
-                        scale: new THREE.Vector3(cutted_brick[2].x, 1, brick.scale.z),
-                        direction: 'z',
-                        color: "hsl(" + hue +", 100%, 50%)"
-                    });    
-                    // fallingbricks.push(fallingbrick);
-                    scene.add(a_fallingbrick.build);
+                if(brick.params.direction == 'x' && !cutted_brick[5]) {
+                    if (cutted_brick[1].x<cutted_brick[3].x){
+                        var a_fallingbrick = new FallingBrick({
+                            position: new THREE.Vector3(cutted_brick[3].x + Number((brick.scale.x).toFixed(1)), -1, cutted_brick[3].z),
+                            scale: new THREE.Vector3(cutted_brick[2].x, 1, Number((brick.scale.z).toFixed(1))),
+                            direction: 'z',
+                            color: "hsl(" + hue +", 100%, 50%)"
+                        });    
+                        // fallingbricks.push(fallingbrick);
+                        scene.add(a_fallingbrick.build);
+                        cutted_bricks.push(a_fallingbrick)
+                    }
+                    else{
+                        var a_fallingbrick = new FallingBrick({
+                            position: new THREE.Vector3(cutted_brick[3].x - Number((brick.scale.x).toFixed(1)), -1, cutted_brick[3].z),
+                            scale: new THREE.Vector3(cutted_brick[2].x, 1, Number((brick.scale.z).toFixed(1))),
+                            direction: 'z',
+                            color: "hsl(" + hue +", 100%, 50%)"
+                        });    
+                        // fallingbricks.push(fallingbrick);
+                        scene.add(a_fallingbrick.build);
+                        cutted_bricks.push(a_fallingbrick)
+                    }
                 }
-                else if(brick.params.direction == 'z') {
-                    var a_fallingbrick = new FallingBrick({
-                        position: new THREE.Vector3(cutted_brick[3].x, -1, cutted_brick[3].z + brick.scale.z),
-                        scale: new THREE.Vector3(brick.scale.x, 1, cutted_brick[2].z),
-                        direction: 'z',
-                        color: "hsl(" + hue +", 100%, 50%)"
-                    });    
-                    // fallingbricks.push(fallingbrick);
-                    scene.add(a_fallingbrick.build);                       
+                else if(brick.params.direction == 'z' && !cutted_brick[5]) {
+                    if (cutted_brick[1].z<cutted_brick[3].z){
+                        var a_fallingbrick = new FallingBrick({
+                            position: new THREE.Vector3(cutted_brick[3].x, -1, cutted_brick[3].z + Number((brick.scale.z).toFixed(1))),
+                            scale: new THREE.Vector3(Number((brick.scale.x).toFixed(1)), 1, cutted_brick[2].z),
+                            direction: 'z',
+                            color: "hsl(" + hue +", 100%, 50%)"
+                        });    
+                        // fallingbricks.push(fallingbrick);
+                        scene.add(a_fallingbrick.build);
+                        cutted_bricks.push(a_fallingbrick)
+                    }
+                    else{
+                        var a_fallingbrick = new FallingBrick({
+                            position: new THREE.Vector3(cutted_brick[3].x, -1, cutted_brick[3].z - Number((brick.scale.z).toFixed(1))),
+                            scale: new THREE.Vector3(Number((brick.scale.x).toFixed(1)), 1, cutted_brick[2].z),
+                            direction: 'z',
+                            color: "hsl(" + hue +", 100%, 50%)"
+                        });    
+                        // fallingbricks.push(fallingbrick);
+                        scene.add(a_fallingbrick.build);
+                        cutted_bricks.push(a_fallingbrick)
+                    }     
                 }
 
                 bricks.set(brick);
