@@ -48,6 +48,10 @@ app.get('/player', function(req, res) {
   res.sendFile(__dirname + '/views' + '/player.html');
 });
 
+app.get('/multiplayer', function(req, res) {
+  res.sendFile(__dirname + '/views' + '/form.html');
+});
+
 //=================
 //-----Socket------
 //=================
